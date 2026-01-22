@@ -4,7 +4,8 @@ import arcade
 WINDOW_WIDHT = 1280
 WINDOW_HEIGHT = 720
 WINDOW_TITLE = "Platformer"
-TILE_SCALING = 0,5
+TILE_SCALING = 0.5
+PLAYER_MOVEMENT_SPEED = 5
 
 class GameView(arcade.Window):
 
@@ -52,6 +53,31 @@ class GameView(arcade.Window):
 
         self.player_list.draw()
         self.wall_list.draw()
+
+    def on_update(self, delta_time):
+        self.physics_engine.update()
+
+    def on_key_press(self, key ,modifiers):
+        
+        if key == arcade.key.UP or key == arcade.key.W:
+            self.player_sprite.change_y = PLAYER_MOVEMENT_SPEED
+        if key == arcade.key.DOWN or key == arcade.key.S:
+            self.player_sprite.change_y = PLAYER_MOVEMENT_SPEED
+        if key == arcade.key.LEFT or key == arcade.key.A:
+            self.player_sprite.change_x = PLAYER_MOVEMENT_SPEED
+        if key == arcade.key.RIGHT or key == arcade.key.D:
+            self.player_sprite.change_x = PLAYER_MOVEMENT_SPEED
+   
+    def on_key_release (self, key modifiers):
+
+        if key == arcade.key.UP or key == arcade.key.W:
+            self.player_sprite.change_y = 0
+        elif key == arcade.key.DOWN or key == arcade.key.S:
+            self.player_sprite.change_y = 0
+        elif key == arcade.key.LEFT or key == arcade.key.A:
+            self.player_sprite.change_x = 0
+        elif key == arcade.key.RIGHT or key == arcade.key.D:
+            self.player_sprite.change_x = 0
 
 def main():
     window = GameView()
