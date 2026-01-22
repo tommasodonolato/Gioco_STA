@@ -7,10 +7,7 @@ WINDOW_TITLE = "Platformer"
 TILE_SCALING = 0.5
 PLAYER_MOVEMENT_SPEED = 5
 
-class GameView(arcade.Window):
-
-
-    
+class GameView(arcade.Window):    
     
     def __init__(self):
         super().__init__(WINDOW_HEIGHT, WINDOW_TITLE, WINDOW_WIDHT)
