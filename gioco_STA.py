@@ -6,6 +6,8 @@ WINDOW_HEIGHT = 720
 WINDOW_TITLE = "Platformer"
 TILE_SCALING = 0.5
 PLAYER_MOVEMENT_SPEED = 5
+GRAVITY = 1
+PLAYER_JUMP_SPEED = 20
 
 class GameView(arcade.Window):    
     
@@ -34,12 +36,15 @@ class GameView(arcade.Window):
            #self.wall_list.append(wall)
             pass
         coordinate_list = [[512, 96], [256, 96], [768, 96]]
-
+        #mettere lo sprite
         for coordinate in coordinate_list:
             wall = arcade.Sprite("sprite muro", scale = TILE_SCALING)
             wall.position = coordinate
             self.wall_list.append(wall)
 
+            self.physics_engine = arcade.PhysicsEnginePlatformer(
+                self.player_list, walls = self.wall_list, gravity_constant = GRAVITY
+            )
 
 
     def setup(self):
