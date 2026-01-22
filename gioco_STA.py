@@ -12,11 +12,21 @@ class GameView(arcade.Window):
 
         self.background_color = arcade.csscolor.ANTIQUE_WHITE
 
+        self.player_texture = arcade.load_texture(
+            ":resources:images./game_assets./montanaro.png"
+        )
+
+        self.player_sprite = arcade.Sprite(self.player_texture)
+        self.player_sprite.center_x = 64
+        self.player_sprite.center_y = 128
+
     def setup(self):
         pass
 
     def on_draw(self):
         self.clear()
+
+        arcade.draw_sprite(self.player_sprite)
 
 def main():
     window = GameView()
