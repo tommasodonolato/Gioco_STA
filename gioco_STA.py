@@ -68,7 +68,7 @@ class GameView(arcade.Window):
         if key == arcade.key.RIGHT or key == arcade.key.D:
             self.player_sprite.change_x = PLAYER_MOVEMENT_SPEED
    
-    def on_key_release (self, key modifiers):
+    def on_key_release (self, key, modifiers):
 
         if key == arcade.key.UP or key == arcade.key.W:
             self.player_sprite.change_y = 0
