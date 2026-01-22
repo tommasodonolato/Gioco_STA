@@ -6,15 +6,18 @@ ALTEZZA_FINESTRA = 720
 TITOLO_FINESTRA = "Platformer"
 
 class GameView(arcade.Window):
+
+
+    
     
     def __init__(self):
         super().__init__(LARGHEZZA_FINESTRA, ALTEZZA_FINESTRA, TITOLO_FINESTRA)
 
         self.background_color = arcade.csscolor.ANTIQUE_WHITE
 
-        self.player_texture = arcade.load_texture(
-            ":resources:images./game_assets./montanaro.png"
-        )
+        #self.player_texture = arcade.load_texture(
+         #   "./game_assets./montanaro.jpg"
+        #)
 
         self.player_sprite = arcade.Sprite(self.player_texture)
         self.player_sprite.center_x = 64
