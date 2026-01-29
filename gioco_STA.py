@@ -4,7 +4,7 @@ import arcade
 WINDOW_WIDHT = 1280
 WINDOW_HEIGHT = 720
 WINDOW_TITLE = "Platformer"
-#TILE_SCALING = 0.5
+TILE_SCALING = 0.5
 #PLAYER_MOVEMENT_SPEED = 5
 #GRAVITY = 1
 #PLAYER_JUMP_SPEED = 20
@@ -24,23 +24,17 @@ class GameView(arcade.Window):
         self.player_sprite.center_x = 64
         self.player_sprite.center_y = 128
 
-        # self.player_list = arcade.SpriteList()
-        # self.player_list.append(self.player_sprite)
+        self.player_list = arcade.SpriteList()
+        self.player_list.append(self.player_sprite)
 
-        #self.wall_list = arcade.SpriteList(use_spatial_hash = True)
-
-        #for x in range(0, 1250, 64):
-           # wall = arcade.Sprite (sprite muro, scale = TILE_SCALING) 
-           #wall.center_x = x
-          # wall.center_y = 32
-           #self.wall_list.append(wall)
-           # pass
-        #coordinate_list = [[512, 96], [256, 96], [768, 96]]
-        #mettere lo sprite
-       # for coordinate in coordinate_list:
-          #  wall = arcade.Sprite("sprite muro", scale = TILE_SCALING)
-           # wall.position = coordinate
-           # self.wall_list.append(wall)
+        self.wall_list = arcade.SpriteList(use_spatial_hash = True)
+           
+        coordinate_list = [[512, 96], [256, 96], [768, 96]]
+        
+        for coordinate in coordinate_list:
+            wall = arcade.Sprite("./game_assets/muro_barile.png", scale = TILE_SCALING)
+            wall.position = coordinate
+            self.wall_list.append(wall)
 
            # self.physics_engine = arcade.PhysicsEnginePlatformer(
           #      self.player_list, walls = self.wall_list, gravity_constant = GRAVITY
@@ -54,7 +48,8 @@ class GameView(arcade.Window):
         self.clear()
         arcade.draw_sprite(self.player_sprite)
 
-       # self.wall_list.draw()
+        self.player_list.draw()
+        self.wall_list.draw()
 
     #def on_update(self, delta_time):
        # self.physics_engine.update()
