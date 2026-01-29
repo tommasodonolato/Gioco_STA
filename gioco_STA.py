@@ -12,20 +12,20 @@ WINDOW_TITLE = "Platformer"
 class GameView(arcade.Window):    
     
     def __init__(self):
-        super().__init__(WINDOW_HEIGHT, WINDOW_TITLE, WINDOW_WIDHT)
+        super().__init__(WINDOW_WIDHT, WINDOW_HEIGHT, WINDOW_TITLE)
 
         self.background_color = arcade.csscolor.ANTIQUE_WHITE
 
         self.player_texture = arcade.load_texture(
-            "./game_assets./sprite_128x128.png"
+            "./game_assets/montanaro.png"
         )
 
         self.player_sprite = arcade.Sprite(self.player_texture)
         self.player_sprite.center_x = 64
         self.player_sprite.center_y = 128
 
-        self.player_list = arcade.SpriteList()
-        self.player_list.append(self.player_sprite)
+        # self.player_list = arcade.SpriteList()
+        # self.player_list.append(self.player_sprite)
 
         #self.wall_list = arcade.SpriteList(use_spatial_hash = True)
 
@@ -52,8 +52,8 @@ class GameView(arcade.Window):
 
     def on_draw(self):
         self.clear()
+        arcade.draw_sprite(self.player_sprite)
 
-        self.player_list.draw()
        # self.wall_list.draw()
 
     #def on_update(self, delta_time):
@@ -80,8 +80,7 @@ class GameView(arcade.Window):
           #  self.player_sprite.change_x = 0
 
 def main():
-    window = GameView()
-    window.setup()
+    giochino = GameView()
     arcade.run()
 
 
