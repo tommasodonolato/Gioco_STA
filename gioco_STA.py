@@ -29,16 +29,18 @@ class GameView(arcade.Window):
 
         self.wall_list = arcade.SpriteList(use_spatial_hash = True)
            
-        coordinate_list = [[512, 96], [256, 96], [768, 96],[64,80]]
-        
+        coordinate_list = [[512, 96], [256, 96], [768, 96],[64,96],[1024, 96]]
+
+        self.wall_list.append(arcade.Sprite("./game_assets/terreno.png",2,WINDOW_WIDHT/2,10))
+
         for coordinate in coordinate_list:
             wall = arcade.Sprite("./game_assets/muro_barile.png", scale = TILE_SCALING)
             wall.position = coordinate
             self.wall_list.append(wall)
 
-            self.physics_engine = arcade.PhysicsEnginePlatformer(
-                self.player_sprite, self.wall_list
-            )
+        self.physics_engine = arcade.PhysicsEnginePlatformer(
+            self.player_sprite, self.wall_list
+        )
 
 
     def setup(self):
