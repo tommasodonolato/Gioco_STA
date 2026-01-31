@@ -1,6 +1,6 @@
 import arcade
 
-#valori assoluti
+
 WINDOW_WIDHT = 1280
 WINDOW_HEIGHT = 720
 WINDOW_TITLE = "Platformer"
@@ -42,8 +42,8 @@ class GameView(arcade.Window):
             self.player_sprite, self.wall_list
         )
 
-
     def setup(self):
+        
         self.background = arcade.load_texture(
             "./game_assets/sfondo_gioco.png"
         )
