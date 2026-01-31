@@ -56,6 +56,7 @@ class GameView(arcade.Window):
         self.wall_list.draw()
 
     def on_update(self, delta_time):
+        
         self.physics_engine.update()
 
     def on_key_press(self, key ,modifiers):
