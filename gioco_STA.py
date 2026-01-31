@@ -7,7 +7,7 @@ WINDOW_TITLE = "Platformer"
 TILE_SCALING = 0.5
 PLAYER_MOVEMENT_SPEED = 5
 GRAVITY = 1
-PLAYER_JUMP_SPEED = 10
+PLAYER_JUMP_SPEED = 100
 
 class GameView(arcade.Window):    
     
