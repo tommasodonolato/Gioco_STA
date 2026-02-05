@@ -21,6 +21,8 @@ class GameView(arcade.Window):
         self.player_list = None
         self.wall_list = None
         self.background = None
+
+
     def setup(self):
 
         self.player_texture = arcade.load_texture(
@@ -80,7 +82,7 @@ class GameView(arcade.Window):
 
     def on_key_press(self, key ,modifiers):
         
-        if key == arcade.key.UP or key == arcade.key.W:
+        if key == arcade.key.UP or key == arcade.key.SPACE:
             if self.physics_engine.can_jump():
                 self.player_sprite.change_y = GameView.PLAYER_JUMP_SPEED
 
@@ -92,8 +94,10 @@ class GameView(arcade.Window):
            self.player_sprite.change_x = GameView.PLAYER_MOVEMENT_SPEED
    
     def on_key_release (self, key, modifiers):
-        
-        if key == arcade.key.LEFT or key == arcade.key.A:
+
+        if key == arcade.key.P:
+            self.setup()
+        elif key == arcade.key.LEFT or key == arcade.key.A:
             self.player_sprite.change_x = 0
         elif key == arcade.key.RIGHT or key == arcade.key.D:
             self.player_sprite.change_x = 0
