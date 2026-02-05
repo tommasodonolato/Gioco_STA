@@ -21,7 +21,7 @@ class GameView(arcade.Window):
         self.player_list = None
         self.wall_list = None
         self.background = None
-
+        self.camer = None
 
     def setup(self):
 
@@ -40,7 +40,7 @@ class GameView(arcade.Window):
 
         tile_size = 64 * GameView.TILE_SCALING
 
-        for x in range(0, GameView.WINDOW_WIDTH + int(tile_size), int(tile_size)):
+        for x in range(-350, 10000, 64):
             wall = arcade.Sprite(
                 "./game_assets/terreno.png",
                 scale=GameView.TILE_SCALING
@@ -48,6 +48,9 @@ class GameView(arcade.Window):
             wall.center_x = x
             wall.center_y = tile_size // 2
             self.wall_list.append(wall)
+
+
+            
 
         coordinate_list = [[512, 96], [256, 96], [768, 96],[64,96],[1024, 96]]
 
@@ -69,16 +72,22 @@ class GameView(arcade.Window):
             "./game_assets/sfondo_gioco.png"
         )
 
+        self.camera = arcade.Camera2D()
+
     def on_draw(self):
         self.clear()
-        arcade.draw_texture_rect(self.background,arcade.XYWH(GameView.WINDOW_WIDTH/2, GameView.WINDOW_HEIGHT/2,GameView.WINDOW_WIDTH, GameView.WINDOW_HEIGHT))
+        arcade.draw_texture_rect(self.background,arcade.XYWH(self.player_sprite.center_x, GameView.WINDOW_HEIGHT/2,GameView.WINDOW_WIDTH, GameView.WINDOW_HEIGHT))
         self.player_list.draw()
         self.wall_list.draw()
+        self.camera.use()
 
     def on_update(self, delta_time):
         
         self.physics_engine.update()
 
+        x,y = self.player_sprite.position
+
+        self.camera.position = x,y+140
 
     def on_key_press(self, key ,modifiers):
         
@@ -101,7 +110,7 @@ class GameView(arcade.Window):
             self.player_sprite.change_x = 0
         elif key == arcade.key.RIGHT or key == arcade.key.D:
             self.player_sprite.change_x = 0
-            
+
 def main():
     giochino = GameView()
     giochino.setup()
