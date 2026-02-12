@@ -72,22 +72,40 @@ class GameView(arcade.Window):
             "./game_assets/sfondo_gioco.png"
         )
 
-        self.camera = arcade.Camera2D()
+        self.camera_sprites = arcade.Camera2D()
+        self.camera_background = arcade.Camera2D()
 
     def on_draw(self):
         self.clear()
-        arcade.draw_texture_rect(self.background,arcade.XYWH(self.player_sprite.center_x, GameView.WINDOW_HEIGHT/2,GameView.WINDOW_WIDTH, GameView.WINDOW_HEIGHT))
-        self.player_list.draw()
+
+        self.camera_background.use()
+        arcade.draw_texture_rect(
+                self.background,
+                arcade.XYWH(
+                    self.camera_background.position.x,
+                    GameView.WINDOW_HEIGHT / 2,
+                    GameView.WINDOW_WIDTH,
+                    GameView.WINDOW_HEIGHT
+                )
+            )
+        
+ 
+        self.camera_sprites.use()
         self.wall_list.draw()
-        self.camera.use()
+        self.player_list.draw()
+            
 
     def on_update(self, delta_time):
         
         self.physics_engine.update()
 
-        x,y = self.player_sprite.position
+        x, y = self.player_sprite.position
+        
+        self.camera_sprites.position = arcade.Vec2(x, y)
 
-        self.camera.position = x,y+140
+        self.camera_background.position = arcade.Vec2(x, y)
+
+
 
     def on_key_press(self, key ,modifiers):
         
