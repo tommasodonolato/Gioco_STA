@@ -1,8 +1,6 @@
 import arcade
 
 
-
-
 class GameView(arcade.Window):   
 
     WINDOW_WIDTH = 1280
@@ -46,8 +44,9 @@ class GameView(arcade.Window):
                 scale=GameView.TILE_SCALING
             )
             wall.center_x = x
-            wall.center_y = tile_size // 2
+            wall.center_y = (wall.height * GameView.TILE_SCALING) / 2
             self.wall_list.append(wall)
+        self.player_sprite.center_y = wall.height * GameView.TILE_SCALING + self.player_sprite.height / 2
 
 
             
