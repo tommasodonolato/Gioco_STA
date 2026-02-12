@@ -38,15 +38,19 @@ class GameView(arcade.Window):
 
         tile_size = 64 * GameView.TILE_SCALING
 
+        floor_y = 0
+
         for x in range(-350, 10000, 64):
             wall = arcade.Sprite(
                 "./game_assets/terreno.png",
                 scale=GameView.TILE_SCALING
             )
             wall.center_x = x
-            wall.center_y = (wall.height * GameView.TILE_SCALING) / 2
+            wall.center_y = floor_y + (wall.height * GameView.TILE_SCALING) / 2
             self.wall_list.append(wall)
-        self.player_sprite.center_y = wall.height * GameView.TILE_SCALING + self.player_sprite.height / 2
+
+        self.player_sprite.center_x = 64
+        self.player_sprite.center_y = (wall.height * GameView.TILE_SCALING) + self.player_sprite.height / 2
 
 
             
@@ -100,9 +104,15 @@ class GameView(arcade.Window):
 
         x, y = self.player_sprite.position
         
-        self.camera_sprites.position = arcade.Vec2(x, y)
+        self.camera_sprites.position = arcade.Vec2(
+        x - GameView.WINDOW_WIDTH / 2,  # centro player sullo schermo
+        0  # Y della camera fisso, terreno sempre in basso
+    )
 
-        self.camera_background.position = arcade.Vec2(x, y)
+        self.camera_background.position = arcade.Vec2(
+        (x - GameView.WINDOW_WIDTH / 2) * 0.4,  # parallax background
+        0
+    )
 
 
 
