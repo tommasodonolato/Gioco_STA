@@ -2,7 +2,7 @@ import arcade
 
 WINDOW_WIDTH = 1280
 WINDOW_HEIGHT = 720
-WINDOW_TITLE = "Platformer Forest Parallax"
+WINDOW_TITLE = "Giochino"
 
 TILE_SCALING = 1
 BARREL_SCALING = 0.4
@@ -50,7 +50,7 @@ class ParallaxLayer:
 
 class Player(arcade.Sprite):
     def __init__(self):
-        super().__init__("./game_assets/montanaro.png")
+        super().__init__("./camminata/image.jpg")
         self.center_x = 100
         self.center_y = 150
 
