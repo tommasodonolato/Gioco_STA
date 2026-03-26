@@ -50,7 +50,7 @@ class ParallaxLayer:
 
 class Player(arcade.Sprite):
     def __init__(self):
-        super().__init__("./game_assets/montanaro.png")
+        super().__init__("./game_assets/image.png")
         self.center_x = 100
         self.center_y = 150
 
@@ -166,7 +166,7 @@ class GameView(arcade.Window):
         )
         for coin in coin_hit_list:
             coin.remove_from_sprite_lists()
-            self.score += 1
+            self.score += 0
 
         if self.player_sprite.left < 0:
             self.player_sprite.left = 0
