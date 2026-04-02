@@ -15,17 +15,15 @@ CAMERA_SPEED = 0.1
 
 LEVEL_WIDTH = 10000
 
-#Percorsi spritesheet del player
 
-PLAYER_IDLE_SOURCE = "./game_assets/player_idle.png"   
-PLAYER_WALK_SOURCE = "./sprite_animato/corsa_spritesheet.jpg"
-PLAYER_JUMP_SOURCE = "./sprite_animato/salto_spritesheet.png"   
+PLAYER_IDLE_SOURCE = "./sprite_animato/idle_ok.png"
+PLAYER_WALK_SOURCE = "./sprite_animato/run_ok.png"
+PLAYER_JUMP_SOURCE = "./sprite_animato/jump_ok.png"
 
-PLAYER_FRAME_WIDTH  = 64
+
+PLAYER_FRAME_WIDTH  = 128
 PLAYER_FRAME_HEIGHT = 64
-
-
-#Sprite animato
+PLAYER_NUM_FRAME    = 8   
 
 class SpriteAnimato(arcade.Sprite):
     def __init__(self, scala: float = 1.0):
@@ -97,74 +95,60 @@ class SpriteAnimato(arcade.Sprite):
 
 
 
-
 class Player(SpriteAnimato):
     def __init__(self):
         super().__init__(scala=2.0)
-
 
         self.aggiungi_animazione(
             nome="idle",
             percorso=PLAYER_IDLE_SOURCE,
             frame_width=PLAYER_FRAME_WIDTH,
             frame_height=PLAYER_FRAME_HEIGHT,
-            num_frame=4,          
-            colonne=4,
+            num_frame=PLAYER_NUM_FRAME,
+            colonne=PLAYER_NUM_FRAME,
             durata=0.8,
             loop=True,
             default=True,
         )
-      
+
         self.aggiungi_animazione(
             nome="walk",
             percorso=PLAYER_WALK_SOURCE,
             frame_width=PLAYER_FRAME_WIDTH,
             frame_height=PLAYER_FRAME_HEIGHT,
-            num_frame=8,         
-            colonne=8,
+            num_frame=PLAYER_NUM_FRAME,
+            colonne=PLAYER_NUM_FRAME,
             durata=0.6,
             loop=True,
         )
-   
-        try:
-            self.aggiungi_animazione(
-                nome="jump",
-                percorso=PLAYER_JUMP_SOURCE,
-                frame_width=PLAYER_FRAME_WIDTH,
-                frame_height=PLAYER_FRAME_HEIGHT,
-                num_frame=4,
-                colonne=4,
-                durata=0.4,
-                loop=False,      
-            )
-            self._ha_jump_anim = True
-        except Exception:
-            self._ha_jump_anim = False
 
-        # Posizione di partenza
+        self.aggiungi_animazione(
+            nome="jump",
+            percorso=PLAYER_JUMP_SOURCE,
+            frame_width=PLAYER_FRAME_WIDTH,
+            frame_height=PLAYER_FRAME_HEIGHT,
+            num_frame=PLAYER_NUM_FRAME,
+            colonne=PLAYER_NUM_FRAME,
+            durata=0.4,
+            loop=False,
+        )
+
         self.center_x = 100
         self.center_y = 150
-
-        # Direzione: True = destra, False = sinistra
         self._guarda_destra = True
 
-   
     def update_animation(self, delta_time: float = 1 / 60):
-        # Specchia lo sprite in base alla direzione
+        # Flip sinistra/destra
         if self.change_x > 0:
             self._guarda_destra = True
         elif self.change_x < 0:
             self._guarda_destra = False
 
-        # Flip orizzontale: scale negativo se va a sinistra
         self.scale = (abs(self.scale[0]) if self._guarda_destra
-                      else -abs(self.scale[0]),
-                      abs(self.scale[1]))
+                      else -abs(self.scale[0]), abs(self.scale[1]))
 
-        # Scegli l'animazione giusta
-        in_aria = self.change_y != 0  # il motore fisico la azzerà a terra
-
-        if in_aria and self._ha_jump_anim:
+        # Priorità: salto > corsa > idle
+        if self.change_y != 0:
             self.imposta_animazione("jump")
         elif self.change_x != 0:
             self.imposta_animazione("walk")
@@ -201,7 +185,9 @@ class ParallaxLayer:
             x += draw_width
 
 
-
+# ════════════════════════════════════════════════════════════
+#  GameView
+# ════════════════════════════════════════════════════════════
 class GameView(arcade.Window):
 
     def __init__(self):
@@ -237,32 +223,27 @@ class GameView(arcade.Window):
             ParallaxLayer("./forest/forest_short.png",    speed_factor=0.70),
         ]
 
-        # ─── Player ───
         self.player_sprite = Player()
         self.player_list.append(self.player_sprite)
 
-        # ─── Terreno ───
         for x in range(-350, LEVEL_WIDTH, 64):
             wall = arcade.Sprite("./game_assets/terreno.png", scale=TILE_SCALING)
             wall.center_x = x
             wall.center_y = 32
             self.wall_list.append(wall)
 
-        # ─── Barili ───
         barrel_coords = [[512, 96], [256, 96], [768, 96], [1024, 96]]
         for coord in barrel_coords:
             barrel = arcade.Sprite("./game_assets/muro_barile.png", scale=BARREL_SCALING)
             barrel.position = coord
             self.wall_list.append(barrel)
 
-        # ─── Monete ───
         coin_coords = [[128, 96], [384, 96], [640, 96], [1152, 96]]
         for coord in coin_coords:
             coin = arcade.Sprite("./game_assets/moneta.png", scale=COIN_SCALING)
             coin.position = coord
             self.coin_list.append(coin)
 
-        # ─── Motore fisico ───
         self.physics_engine = arcade.PhysicsEnginePlatformer(
             self.player_sprite,
             platforms=self.wall_list,
@@ -272,19 +253,16 @@ class GameView(arcade.Window):
     def on_draw(self):
         self.clear()
 
-        # 1) Sfondo parallax (coordinate schermo)
         self.ui_camera.use()
         cam_x = self.camera.position[0] - WINDOW_WIDTH / 2
         for layer in self.parallax_layers:
             layer.draw(cam_x)
 
-        # 2) Mondo
         self.camera.use()
         self.wall_list.draw()
         self.coin_list.draw()
         self.player_list.draw()
 
-        # 3) UI
         self.ui_camera.use()
         arcade.draw_text(
             f"Monete: {self.score}",
@@ -305,11 +283,8 @@ class GameView(arcade.Window):
 
     def on_update(self, delta_time):
         self.physics_engine.update()
-
-        # ── Aggiorna animazione del player ──
         self.player_sprite.update_animation(delta_time)
 
-        # ── Raccolta monete ──
         coin_hit_list = arcade.check_for_collision_with_list(
             self.player_sprite, self.coin_list
         )
@@ -317,7 +292,6 @@ class GameView(arcade.Window):
             coin.remove_from_sprite_lists()
             self.score += 1
 
-        # ── Limiti mondo ──
         if self.player_sprite.left < 0:
             self.player_sprite.left = 0
         if self.player_sprite.center_y < -100:

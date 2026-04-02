@@ -8,13 +8,7 @@ IDEEE PER IL GIOCO
 
 3) conteggio punti
 
-4) progettazione 5-6 livelli
-
-4.a) idee sotacoli
-
-5) sprite ostacoli
-
-6) sound effect
+4) sound effect
 
 
 
