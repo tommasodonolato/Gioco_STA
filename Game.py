@@ -4,16 +4,20 @@ WINDOW_WIDTH = 1280
 WINDOW_HEIGHT = 720
 WINDOW_TITLE = "Giochino"
 
-TILE_SCALING = 1
+TILE_SCALING = 2
 BARREL_SCALING = 0.4
 COIN_SCALING = 0.5
 
 PLAYER_MOVEMENT_SPEED = 5
-PLAYER_JUMP_SPEED = 15
-GRAVITY = 0.8
+PLAYER_JUMP_SPEED = 13
+GRAVITY = 1
 CAMERA_SPEED = 0.1
 
-LEVEL_WIDTH = 10000
+LEVELS = {
+    1: "./Tiled/mappa_1.tmx",
+    2: "./Tiled/mappa_2.tmx",
+    3: "./Tiled/mappa_3.tmx"
+}
 
 
 PLAYER_IDLE_SOURCE = "./sprite_animato/idle.png"
@@ -203,12 +207,16 @@ class GameView(arcade.Window):
 
         self.score = 0
 
+        self.current_level = 1
+        self.level_width = WINDOW_WIDTH
+
     def setup(self):
         self.score = 0
+        
+        self.current_level = 1
 
         self.player_list = arcade.SpriteList()
-        self.wall_list = arcade.SpriteList(use_spatial_hash=True)
-        self.coin_list = arcade.SpriteList(use_spatial_hash=True)
+     
 
         self.camera = arcade.Camera2D()
         self.ui_camera = arcade.Camera2D()
@@ -224,29 +232,42 @@ class GameView(arcade.Window):
         self.player_sprite = Player()
         self.player_list.append(self.player_sprite)
 
-        for x in range(-350, LEVEL_WIDTH, 64):
-            wall = arcade.Sprite("./game_assets/terreno.png", scale=TILE_SCALING)
-            wall.center_x = x
-            wall.center_y = 32
-            self.wall_list.append(wall)
+       
+        self.carica_livello(self.current_level)
 
-        barrel_coords = [[512, 96], [256, 96], [768, 96], [1024, 96]]
-        for coord in barrel_coords:
-            barrel = arcade.Sprite("./game_assets/muro_barile.png", scale=BARREL_SCALING)
-            barrel.position = coord
-            self.wall_list.append(barrel)
+    
+    def carica_livello(self, numero: int):
 
-        coin_coords = [[128, 96], [384, 96], [640, 96], [1152, 96]]
-        for coord in coin_coords:
-            coin = arcade.Sprite("./game_assets/moneta.png", scale=COIN_SCALING)
-            coin.position = coord
-            self.coin_list.append(coin)
+        tile_map = arcade.load_tilemap(LEVELS[numero], scaling=TILE_SCALING)
 
+    
+        self.wall_list = tile_map.sprite_lists["Livello tile 1"]
+
+    
+        self.coin_list = tile_map.sprite_lists.get("monete", arcade.SpriteList())
+
+
+        self.level_width = tile_map.width * tile_map.tile_width * TILE_SCALING
+
+  
+        self.player_sprite.center_x = 100
+        self.player_sprite.center_y = 400
+
+        
         self.physics_engine = arcade.PhysicsEnginePlatformer(
             self.player_sprite,
             platforms=self.wall_list,
             gravity_constant=GRAVITY
         )
+
+    def livello_successivo(self):
+        if self.current_level < len(LEVELS):
+            self.current_level += 1
+            self.carica_livello(self.current_level)
+        else:
+            print("Hai completato tutti i livelli!")
+
+        
 
     def on_draw(self):
         self.clear()
@@ -270,7 +291,7 @@ class GameView(arcade.Window):
 
     def pan_camera_to_player(self):
         target_x = max(self.player_sprite.center_x, WINDOW_WIDTH / 2)
-        target_x = min(target_x, LEVEL_WIDTH - WINDOW_WIDTH / 2)
+        target_x = min(target_x, self.level_width - WINDOW_WIDTH / 2)
         target_pos = (target_x, WINDOW_HEIGHT / 2)
 
         self.camera.position = arcade.math.lerp_2d(
@@ -292,8 +313,13 @@ class GameView(arcade.Window):
 
         if self.player_sprite.left < 0:
             self.player_sprite.left = 0
+
         if self.player_sprite.center_y < -100:
-            self.player_sprite.center_x, self.player_sprite.center_y = 100, 150
+            self.player_sprite.center_x = 100
+            self.player_sprite.center_y = 200
+
+        if self.player_sprite.center_x > self.level_width - 50:
+            self.livello_successivo()
 
         self.pan_camera_to_player()
 
