@@ -185,9 +185,7 @@ class ParallaxLayer:
             x += draw_width
 
 
-# ════════════════════════════════════════════════════════════
-#  GameView
-# ════════════════════════════════════════════════════════════
+
 class GameView(arcade.Window):
 
     def __init__(self):
