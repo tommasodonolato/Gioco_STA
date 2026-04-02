@@ -16,9 +16,9 @@ CAMERA_SPEED = 0.1
 LEVEL_WIDTH = 10000
 
 
-PLAYER_IDLE_SOURCE = "./sprite_animato/idle_ok.png"
-PLAYER_WALK_SOURCE = "./sprite_animato/run_ok.png"
-PLAYER_JUMP_SOURCE = "./sprite_animato/jump_ok.png"
+PLAYER_IDLE_SOURCE = "./sprite_animato/idle.png"
+PLAYER_WALK_SOURCE = "./sprite_animato/run.png"
+PLAYER_JUMP_SOURCE = "./sprite_animato/jump.png"
 
 
 PLAYER_FRAME_WIDTH  = 128

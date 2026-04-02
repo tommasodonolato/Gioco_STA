@@ -1,0 +1,59 @@
+{
+    "activeFile": "mappa_3.tmx",
+    "expandedProjectPaths": [
+    ],
+    "fileStates": {
+        "mappa_1.tmx": {
+            "scale": 2.0365624999999996,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 320.14730704311813,
+                "y": 184.1338038974989
+            }
+        },
+        "mappa_2.tmx": {
+            "scale": 2.0365624999999996,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 320.14730704311813,
+                "y": 184.1338038974989
+            }
+        },
+        "mappa_3.tmx": {
+            "scale": 2.0365624999999996,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 320.14730704311813,
+                "y": 184.1338038974989
+            }
+        },
+        "nature-paltformer-tileset-16x16.tsx": {
+            "scaleInDock": 2,
+            "scaleInEditor": 1
+        }
+    },
+    "last.imagePath": "C:/Users/tommaso.2/Desktop/Gioco_STA/Tiled",
+    "map.height": 23,
+    "map.lastUsedFormat": "tmx",
+    "map.tileHeight": 16,
+    "map.tileWidth": 16,
+    "map.width": 40,
+    "openFiles": [
+        "mappa_1.tmx",
+        "mappa_2.tmx",
+        "mappa_3.tmx",
+        "nature-paltformer-tileset-16x16.tsx"
+    ],
+    "project": "tile_gioco.tiled-project",
+    "recentFiles": [
+        "mappa_1.tmx",
+        "mappa_2.tmx",
+        "nature-paltformer-tileset-16x16.tsx",
+        "mappa_3.tmx"
+    ],
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.tileSize": {
+        "height": 16,
+        "width": 16
+    }
+}
