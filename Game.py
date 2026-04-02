@@ -15,6 +15,165 @@ CAMERA_SPEED = 0.1
 
 LEVEL_WIDTH = 10000
 
+#Percorsi spritesheet del player
+
+PLAYER_IDLE_SOURCE = "./game_assets/player_idle.png"   
+PLAYER_WALK_SOURCE = "./sprite_animato/corsa_spritesheet.jpg"
+PLAYER_JUMP_SOURCE = "./sprite_animato/salto_spritesheet.png"   
+
+PLAYER_FRAME_WIDTH  = 64
+PLAYER_FRAME_HEIGHT = 64
+
+
+#Sprite animato
+
+class SpriteAnimato(arcade.Sprite):
+    def __init__(self, scala: float = 1.0):
+        super().__init__(scale=scala)
+        self.animazioni = {}
+        self.animazione_corrente = None
+        self.animazione_default = None
+        self.tempo_frame = 0.0
+        self.indice_frame = 0
+
+    def aggiungi_animazione(
+        self,
+        nome: str,
+        percorso: str,
+        frame_width: int,
+        frame_height: int,
+        num_frame: int,
+        colonne: int,
+        durata: float,
+        loop: bool = True,
+        default: bool = False,
+        riga: int = 0,
+    ):
+        sheet = arcade.load_spritesheet(percorso)
+        offset = riga * colonne
+        tutti = sheet.get_texture_grid(
+            size=(frame_width, frame_height),
+            columns=colonne,
+            count=offset + num_frame,
+        )
+        self._registra(nome, tutti[offset:], durata, loop, default)
+
+    def _registra(self, nome, textures, durata, loop, default=False):
+        self.animazioni[nome] = {
+            "textures": textures,
+            "durata_frame": durata / len(textures),
+            "loop": loop,
+        }
+        if default or self.animazione_default is None:
+            self.animazione_default = nome
+        if self.animazione_corrente is None:
+            self._vai(nome)
+
+    def imposta_animazione(self, nome: str):
+        if nome != self.animazione_corrente:
+            self._vai(nome)
+
+    def _vai(self, nome: str):
+        self.animazione_corrente = nome
+        self.indice_frame = 0
+        self.tempo_frame = 0.0
+        self.texture = self.animazioni[nome]["textures"][0]
+
+    def update_animation(self, delta_time: float = 1 / 60):
+        anim = self.animazioni[self.animazione_corrente]
+        self.tempo_frame += delta_time
+        if self.tempo_frame < anim["durata_frame"]:
+            return
+        self.tempo_frame -= anim["durata_frame"]
+        prossimo = self.indice_frame + 1
+        if prossimo < len(anim["textures"]):
+            self.indice_frame = prossimo
+        elif anim["loop"]:
+            self.indice_frame = 0
+        else:
+            self._vai(self.animazione_default)
+            return
+        self.texture = anim["textures"][self.indice_frame]
+
+
+
+
+class Player(SpriteAnimato):
+    def __init__(self):
+        super().__init__(scala=2.0)
+
+
+        self.aggiungi_animazione(
+            nome="idle",
+            percorso=PLAYER_IDLE_SOURCE,
+            frame_width=PLAYER_FRAME_WIDTH,
+            frame_height=PLAYER_FRAME_HEIGHT,
+            num_frame=4,          
+            colonne=4,
+            durata=0.8,
+            loop=True,
+            default=True,
+        )
+      
+        self.aggiungi_animazione(
+            nome="walk",
+            percorso=PLAYER_WALK_SOURCE,
+            frame_width=PLAYER_FRAME_WIDTH,
+            frame_height=PLAYER_FRAME_HEIGHT,
+            num_frame=8,         
+            colonne=8,
+            durata=0.6,
+            loop=True,
+        )
+   
+        try:
+            self.aggiungi_animazione(
+                nome="jump",
+                percorso=PLAYER_JUMP_SOURCE,
+                frame_width=PLAYER_FRAME_WIDTH,
+                frame_height=PLAYER_FRAME_HEIGHT,
+                num_frame=4,
+                colonne=4,
+                durata=0.4,
+                loop=False,      
+            )
+            self._ha_jump_anim = True
+        except Exception:
+            self._ha_jump_anim = False
+
+        # Posizione di partenza
+        self.center_x = 100
+        self.center_y = 150
+
+        # Direzione: True = destra, False = sinistra
+        self._guarda_destra = True
+
+   
+    def update_animation(self, delta_time: float = 1 / 60):
+        # Specchia lo sprite in base alla direzione
+        if self.change_x > 0:
+            self._guarda_destra = True
+        elif self.change_x < 0:
+            self._guarda_destra = False
+
+        # Flip orizzontale: scale negativo se va a sinistra
+        self.scale = (abs(self.scale[0]) if self._guarda_destra
+                      else -abs(self.scale[0]),
+                      abs(self.scale[1]))
+
+        # Scegli l'animazione giusta
+        in_aria = self.change_y != 0  # il motore fisico la azzerà a terra
+
+        if in_aria and self._ha_jump_anim:
+            self.imposta_animazione("jump")
+        elif self.change_x != 0:
+            self.imposta_animazione("walk")
+        else:
+            self.imposta_animazione("idle")
+
+        super().update_animation(delta_time)
+
+
 
 class ParallaxLayer:
     def __init__(self, texture_path: str, speed_factor: float):
@@ -24,20 +183,14 @@ class ParallaxLayer:
         self.height = self.texture.height
 
     def draw(self, cam_x: float):
-
-        # Scala proporzionalmente: altezza fissa = WINDOW_HEIGHT
         scale = WINDOW_HEIGHT / self.height
         draw_width = self.width * scale
-        draw_height = WINDOW_HEIGHT  # altezza sempre uguale alla finestra
+        draw_height = WINDOW_HEIGHT
 
-        # Quanti pixel si è spostato il layer rispetto all'origine
         layer_offset = cam_x * self.speed_factor
-
-        # Calcola quale "tile" è visibile
         start_tile = int(layer_offset // draw_width)
         draw_x_start = start_tile * draw_width - layer_offset
 
-        # Disegna abbastanza ripetizioni per coprire lo schermo
         x = draw_x_start
         while x < WINDOW_WIDTH:
             arcade.draw_texture_rect(
@@ -48,19 +201,13 @@ class ParallaxLayer:
             x += draw_width
 
 
-class Player(arcade.Sprite):
-    def __init__(self):
-        super().__init__("./game_assets/montanaro.png")
-        self.center_x = 100
-        self.center_y = 150
-
 
 class GameView(arcade.Window):
 
     def __init__(self):
         super().__init__(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE)
 
-        self.player_sprite = None
+        self.player_sprite: Player | None = None
         self.player_list = None
         self.wall_list = None
         self.coin_list = None
@@ -82,7 +229,6 @@ class GameView(arcade.Window):
         self.camera = arcade.Camera2D()
         self.ui_camera = arcade.Camera2D()
 
-
         self.parallax_layers = [
             ParallaxLayer("./forest/forest_sky.png",      speed_factor=0.10),
             ParallaxLayer("./forest/forest_mountain.png", speed_factor=0.20),
@@ -91,32 +237,32 @@ class GameView(arcade.Window):
             ParallaxLayer("./forest/forest_short.png",    speed_factor=0.70),
         ]
 
-        # ─── PLAYER ───
+        # ─── Player ───
         self.player_sprite = Player()
         self.player_list.append(self.player_sprite)
 
-        # ─── TERRENO ───
+        # ─── Terreno ───
         for x in range(-350, LEVEL_WIDTH, 64):
             wall = arcade.Sprite("./game_assets/terreno.png", scale=TILE_SCALING)
             wall.center_x = x
             wall.center_y = 32
             self.wall_list.append(wall)
 
-        # ─── BARILI ───
+        # ─── Barili ───
         barrel_coords = [[512, 96], [256, 96], [768, 96], [1024, 96]]
         for coord in barrel_coords:
             barrel = arcade.Sprite("./game_assets/muro_barile.png", scale=BARREL_SCALING)
             barrel.position = coord
             self.wall_list.append(barrel)
 
-        # ─── MONETE ───
+        # ─── Monete ───
         coin_coords = [[128, 96], [384, 96], [640, 96], [1152, 96]]
         for coord in coin_coords:
             coin = arcade.Sprite("./game_assets/moneta.png", scale=COIN_SCALING)
             coin.position = coord
             self.coin_list.append(coin)
 
-        # ─── MOTORE FISICO ───
+        # ─── Motore fisico ───
         self.physics_engine = arcade.PhysicsEnginePlatformer(
             self.player_sprite,
             platforms=self.wall_list,
@@ -126,14 +272,13 @@ class GameView(arcade.Window):
     def on_draw(self):
         self.clear()
 
-        # 1) Sfondo parallax: disegnato in coordinate SCHERMO (ui_camera)
-        #    così non viene spostato dalla camera del mondo.
+        # 1) Sfondo parallax (coordinate schermo)
         self.ui_camera.use()
-        cam_x = self.camera.position[0] - WINDOW_WIDTH / 2  # bordo sinistro camera
+        cam_x = self.camera.position[0] - WINDOW_WIDTH / 2
         for layer in self.parallax_layers:
             layer.draw(cam_x)
 
-        # 2) Mondo (terreno, barili, monete, player) in coordinate MONDO
+        # 2) Mondo
         self.camera.use()
         self.wall_list.draw()
         self.coin_list.draw()
@@ -161,6 +306,10 @@ class GameView(arcade.Window):
     def on_update(self, delta_time):
         self.physics_engine.update()
 
+        # ── Aggiorna animazione del player ──
+        self.player_sprite.update_animation(delta_time)
+
+        # ── Raccolta monete ──
         coin_hit_list = arcade.check_for_collision_with_list(
             self.player_sprite, self.coin_list
         )
@@ -168,6 +317,7 @@ class GameView(arcade.Window):
             coin.remove_from_sprite_lists()
             self.score += 1
 
+        # ── Limiti mondo ──
         if self.player_sprite.left < 0:
             self.player_sprite.left = 0
         if self.player_sprite.center_y < -100:
