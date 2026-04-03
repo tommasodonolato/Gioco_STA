@@ -29,14 +29,16 @@ PLAYER_FRAME_WIDTH  = 128
 PLAYER_FRAME_HEIGHT = 64
 PLAYER_NUM_FRAME    = 8   
 
-FINAL_BACKGROUNDS_LEVEL = [
-    ("./Sfondi_parallasse/moon/moon_sky.png", speed_factor=0.05),
-    ("./Sfondi_parallasse/moon/moon_earth.png", speed_factor=0.10),
-    ("./Sfondi_parallasse/moon/moon_back.png", speed_factor=0.20),
-    ("./Sfondi_parallasse/moon/moon_mid.png", speed_factor=0.35),
-    ("./Sfondi_parallasse/moon/moon_front.png", speed_factor=0.55),
-    ("./Sfondi_parallasse/moon/moon_floor.png", speed_factor=0.80),
+FINAL_BG_LAYERS = [
+    ("./luna/moon_sky.png",   0.05),
+    ("./luna/moon_earth.png", 0.10),
+    ("./luna/moon_back.png",  0.20),
+    ("./luna/moon_mid.png",   0.35),
+    ("./luna/moon_front.png", 0.55),
+    ("./luna/moon_floor.png", 0.80),
 ]
+
+PLAYER_JUMP_SPEED_LUNA = 20
 
 class SpriteAnimato(arcade.Sprite):
     def __init__(self, scala: float = 1.0):
@@ -216,6 +218,7 @@ class GameView(arcade.Window):
         self.current_level = 1
         self.level_width = WINDOW_WIDTH
         self.spawn_destra = True
+        self.is_final_level = False
 
     def setup(self):
         self.score = 0
@@ -241,6 +244,7 @@ class GameView(arcade.Window):
 
        
         self.carica_livello(self.current_level)
+
 
     
     def carica_livello(self, numero: int):
@@ -274,7 +278,32 @@ class GameView(arcade.Window):
             self.current_level += 1
             self.carica_livello(self.current_level)
         else:
-            print("Hai completato tutti i livelli!")
+            self.carica_livello_finale()
+
+
+
+    def carica_livello_finale(self):
+        self.is_final_level = True
+        self.parallax_layers = [
+            ParallaxLayer(path, speed) 
+            for path, speed in FINAL_BG_LAYERS    
+        ]
+
+        self.wall_list = arcade.SpriteList()
+        self.coin_list = arcade.SpriteList()
+
+        self.level_width = 99999
+
+        self.player_sprite.center_x = 100
+        self.player_sprite.center_y = 400
+
+        self.physics_engine = arcade.PhysicsEnginePlatformer(
+            self.player_sprite,
+            platforms=arcade.SpriteList(),
+            gravity_constant = 0.2
+        )
+  
+
 
         
 
@@ -298,16 +327,26 @@ class GameView(arcade.Window):
             arcade.color.WHITE, 20, bold=True
         )
 
-    def pan_camera_to_player(self):
-        target_x = max(self.player_sprite.center_x, WINDOW_WIDTH / 2)
-        target_x = min(target_x, self.level_width - WINDOW_WIDTH / 2)
-        target_pos = (target_x, WINDOW_HEIGHT / 2)
 
-        self.camera.position = arcade.math.lerp_2d(
-            self.camera.position,
-            target_pos,
-            CAMERA_SPEED
-        )
+
+    def pan_camera_to_player(self):
+        if self.is_final_level:
+           
+            self.camera.position = arcade.math.lerp_2d(
+                self.camera.position,
+                (self.player_sprite.center_x, self.player_sprite.center_y),
+                CAMERA_SPEED
+            )
+        else:
+            target_x = max(self.player_sprite.center_x, WINDOW_WIDTH / 2)
+            target_x = min(target_x, self.level_width - WINDOW_WIDTH / 2)
+            target_pos = (target_x, WINDOW_HEIGHT / 2)
+            self.camera.position = arcade.math.lerp_2d(
+                self.camera.position,
+                target_pos,
+                CAMERA_SPEED
+            )
+
 
     def on_update(self, delta_time):
         self.physics_engine.update()
@@ -339,14 +378,19 @@ class GameView(arcade.Window):
 
         self.pan_camera_to_player()
 
+
+
     def on_key_press(self, key, modifiers):
         if key in (arcade.key.UP, arcade.key.SPACE, arcade.key.W):
             if self.physics_engine.can_jump():
-                self.player_sprite.change_y = PLAYER_JUMP_SPEED
+                jump_speed = 20 if self.is_final_level else PLAYER_JUMP_SPEED
+                self.player_sprite.change_y = jump_speed
         elif key in (arcade.key.LEFT, arcade.key.A):
             self.player_sprite.change_x = -PLAYER_MOVEMENT_SPEED
         elif key in (arcade.key.RIGHT, arcade.key.D):
             self.player_sprite.change_x = PLAYER_MOVEMENT_SPEED
+
+
 
     def on_key_release(self, key, modifiers):
         if key in (arcade.key.LEFT, arcade.key.A, arcade.key.RIGHT, arcade.key.D):
