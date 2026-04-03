@@ -287,8 +287,72 @@ class LoreView(arcade.View):
         if key == arcade.key.N:
             self.indice += 1
             if self.indice >= len(self.immagini):
-                self.window.show_view(CommandsView())      
+                self.window.show_view(CommandsView())  
 
+    
+class DialogoView(arcade.View):
+    def __init__(self, game_view):
+        super().__init__()
+        self.game_view = game_view
+        self.immagini = [
+            arcade.load_texture("./game_assets/dialogo_1.png"),
+            arcade.load_texture("./game_assets/dialogo_2.png"),
+        ]
+        self.indice = 0
+
+    def on_draw(self):
+        self.clear()
+        arcade.draw_texture_rect(
+            self.immagini[self.indice],
+            arcade.XYWH(WINDOW_WIDTH/2, WINDOW_HEIGHT/2, WINDOW_WIDTH, WINDOW_HEIGHT)
+        )
+
+    def on_key_press(self, key, modifiers):
+        if key == arcade.key.N:
+            self.indice += 1
+            if self.indice >= len(self.immagini):
+               
+                if self.game_view.score >= 30:
+                    self.game_view.fase_finale = 2
+                    self.window.show_view(self.game_view)
+                else:
+                    self.window.show_view(GameOverView())
+
+
+class GameOverView(arcade.View):
+    def __init__(self):
+        super().__init__()
+        self.background = arcade.load_texture("./game_assets/gameover.png")
+
+    def on_draw(self):
+        self.clear()
+        arcade.draw_texture_rect(
+            self.background,
+            arcade.XYWH(WINDOW_WIDTH/2, WINDOW_HEIGHT/2, WINDOW_WIDTH, WINDOW_HEIGHT)
+        )
+
+    def on_key_press(self, key, modifiers):
+        if key == arcade.key.RETURN:
+            game = GameView()
+            game.setup()
+            self.window.show_view(game)
+
+
+class VittoriaView(arcade.View):
+    def __init__(self):
+        super().__init__()
+        self.background = arcade.load_texture("./game_assets/vittoria.png")
+
+    def on_draw(self):
+        self.clear()
+        arcade.draw_texture_rect(
+            self.background,
+            arcade.XYWH(WINDOW_WIDTH/2, WINDOW_HEIGHT/2, WINDOW_WIDTH, WINDOW_HEIGHT)
+        )
+
+    def on_key_press(self, key, modifiers):
+        if key == arcade.key.RETURN:
+            self.window.show_view(MenuView())
 
 
 class GameView(arcade.View):
@@ -416,7 +480,6 @@ class GameView(arcade.View):
 
 
         
-
     def on_draw(self):
         self.clear()
 
