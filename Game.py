@@ -295,8 +295,9 @@ class DialogoView(arcade.View):
         super().__init__()
         self.game_view = game_view
         self.immagini = [
-            arcade.load_texture("./game_assets/dialogo_1.png"),
-            arcade.load_texture("./game_assets/dialogo_2.png"),
+            arcade.load_texture("./game_assets/Dialogo_1.png"),
+            arcade.load_texture("./game_assets/Dialogo_2.png"),
+            arcade.load_texture("./game_assets/Dialogo_3.png"),
         ]
         self.indice = 0
 
@@ -310,19 +311,19 @@ class DialogoView(arcade.View):
     def on_key_press(self, key, modifiers):
         if key == arcade.key.N:
             self.indice += 1
-            if self.indice >= len(self.immagini):
-               
-                if self.game_view.score >= 30:
-                    self.game_view.fase_finale = 2
-                    self.window.show_view(self.game_view)
-                else:
+            if self.indice == 2: 
+                if self.game_view.score < 30:
                     self.window.show_view(GameOverView())
+                    return
+            if self.indice >= len(self.immagini):
+                self.game_view.fase_finale = 2
+                self.window.show_view(self.game_view)
 
 
 class GameOverView(arcade.View):
     def __init__(self):
         super().__init__()
-        self.background = arcade.load_texture("./game_assets/gameover.png")
+        self.background = arcade.load_texture("./game_assets/Game_over.png")
 
     def on_draw(self):
         self.clear()
@@ -341,7 +342,7 @@ class GameOverView(arcade.View):
 class VittoriaView(arcade.View):
     def __init__(self):
         super().__init__()
-        self.background = arcade.load_texture("./game_assets/vittoria.png")
+        self.background = arcade.load_texture("./game_assets/Victory.png")
 
     def on_draw(self):
         self.clear()
@@ -377,6 +378,7 @@ class GameView(arcade.View):
         self.strega_apparsa = False
         self.strega_sprite = None
         self.fase_finale = 0
+        self.strega_list = arcade.SpriteList()
 
 
 
@@ -494,7 +496,7 @@ class GameView(arcade.View):
         self.player_list.draw()
 
         if self.is_final_level and self.strega_apparsa and self.strega_sprite:
-            self.strega_sprite.draw()
+            self.strega_list.draw()
 
         self.ui_camera.use()
         arcade.draw_text(
@@ -566,12 +568,14 @@ class GameView(arcade.View):
                 self.strega_sprite = arcade.Sprite("./game_assets/strega.png", scale = 2)
                 self.strega_sprite.center_x = 1100
                 self.strega_sprite.center_y = 600
+                self.strega_list = arcade.SpriteList()  
+                self.strega_list.append(self.strega_sprite)
         
         if self.strega_apparsa and self.strega_sprite:
             if arcade.check_for_collision(self.player_sprite, self.strega_sprite):
                 if self.fase_finale == 0:
                     self.fase_finale = 1
-                    self.window.show_view(DialogoView())
+                    self.window.show_view(DialogoView(self))
 
         if self.fase_finale == 2 and self.strega_sprite:
             if self.strega_sprite.center_y > 200:
