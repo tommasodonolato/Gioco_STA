@@ -29,6 +29,10 @@ PLAYER_FRAME_WIDTH  = 128
 PLAYER_FRAME_HEIGHT = 64
 PLAYER_NUM_FRAME    = 8   
 
+FINAL_BACKGROUNDS_LEVEL = [
+    ()
+]
+
 class SpriteAnimato(arcade.Sprite):
     def __init__(self, scala: float = 1.0):
         super().__init__(scale=scala)
