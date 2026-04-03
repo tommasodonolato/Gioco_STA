@@ -1,3 +1,5 @@
+from typing import Self
+
 import arcade
 
 WINDOW_WIDTH = 1280
@@ -30,12 +32,12 @@ PLAYER_FRAME_HEIGHT = 64
 PLAYER_NUM_FRAME    = 8   
 
 FINAL_BG_LAYERS = [
-    ("./luna/moon_sky.png",   0.05),
-    ("./luna/moon_earth.png", 0.10),
-    ("./luna/moon_back.png",  0.20),
-    ("./luna/moon_mid.png",   0.35),
-    ("./luna/moon_front.png", 0.55),
-    ("./luna/moon_floor.png", 0.80),
+    ("./Sfondi_parallasse/moon/moon_sky.png",   0.05),
+    ("./Sfondi_parallasse/moon/moon_earth.png", 0.05),
+    ("./Sfondi_parallasse/moon/moon_back.png",  0.20),
+    ("./Sfondi_parallasse/moon/moon_mid.png",   0.35),
+    ("./Sfondi_parallasse/moon/moon_front.png", 0.55),
+    ("./Sfondi_parallasse/moon/moon_floor.png", 0.80),
 ]
 
 PLAYER_JUMP_SPEED_LUNA = 20
@@ -220,13 +222,16 @@ class GameView(arcade.Window):
         self.spawn_destra = True
         self.is_final_level = False
 
+
+
     def setup(self):
         self.score = 0
         
         self.current_level = 1
 
+        self.is_final_level = False
+
         self.player_list = arcade.SpriteList()
-     
 
         self.camera = arcade.Camera2D()
         self.ui_camera = arcade.Camera2D()
@@ -242,7 +247,6 @@ class GameView(arcade.Window):
         self.player_sprite = Player()
         self.player_list.append(self.player_sprite)
 
-       
         self.carica_livello(self.current_level)
 
 
@@ -273,6 +277,8 @@ class GameView(arcade.Window):
         target_x = min(target_x, self.level_width - WINDOW_WIDTH / 2)
         self.camera.position = (WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2)
 
+
+
     def livello_successivo(self):
         if self.current_level < len(LEVELS):
             self.current_level += 1
@@ -297,9 +303,14 @@ class GameView(arcade.Window):
         self.player_sprite.center_x = 100
         self.player_sprite.center_y = 400
 
+        floor = arcade.SpriteSolidColor(99999, 32, color = (0,0,0,0))
+        floor.center_x = self.level_width / 2
+        floor.center_y = 16
+        self.wall_list.append(floor)
+
         self.physics_engine = arcade.PhysicsEnginePlatformer(
             self.player_sprite,
-            platforms=arcade.SpriteList(),
+            platforms = self.wall_list,
             gravity_constant = 0.2
         )
   
@@ -360,7 +371,9 @@ class GameView(arcade.Window):
             self.score += 1
 
         if self.player_sprite.left < 0:
-            if self.current_level > 1:
+            if self.is_final_level:
+                self.player_sprite.left = 0
+            elif self.current_level > 1:
                 self.current_level -= 1
                 self.spawn_destra = False
                 self.carica_livello(self.current_level)
@@ -368,13 +381,18 @@ class GameView(arcade.Window):
                 self.player_sprite.left = 0
 
         if self.player_sprite.center_y < -100:
-            self.current_level = 1
-            self.spawn_destra = True
-            self.carica_livello(self.current_level)
+            if self.is_final_level:
+                self.player_sprite.center_x = 100
+                self.player_sprite.center_y = 400  
+            else:
+                self.current_level = 1
+                self.spawn_destra = True
+                self.carica_livello(self.current_level)
 
         if self.player_sprite.center_x > self.level_width - 50:
-            self.spawn_destra = True
-            self.livello_successivo()
+            if not self.is_final_level:
+                self.spawn_destra = True
+                self.livello_successivo()
 
         self.pan_camera_to_player()
 
@@ -383,12 +401,14 @@ class GameView(arcade.Window):
     def on_key_press(self, key, modifiers):
         if key in (arcade.key.UP, arcade.key.SPACE, arcade.key.W):
             if self.physics_engine.can_jump():
-                jump_speed = 20 if self.is_final_level else PLAYER_JUMP_SPEED
+                jump_speed = PLAYER_JUMP_SPEED_LUNA if self.is_final_level else PLAYER_JUMP_SPEED
                 self.player_sprite.change_y = jump_speed
         elif key in (arcade.key.LEFT, arcade.key.A):
             self.player_sprite.change_x = -PLAYER_MOVEMENT_SPEED
         elif key in (arcade.key.RIGHT, arcade.key.D):
             self.player_sprite.change_x = PLAYER_MOVEMENT_SPEED
+        if key == arcade.key.F:
+            self.player_sprite.center_x = self.level_width - 60
 
 
 
