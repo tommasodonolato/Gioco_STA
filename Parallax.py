@@ -1,11 +1,11 @@
-# ===================== PARALLASSE =====================
+# Parallasse 
 
 import arcade
 from Costanti import *
 
 
 class ParallaxLayer:
-    """Singolo layer dello sfondo con effetto parallasse e tiling orizzontale."""
+# Singolo layer dello sfondo con effetto parallasse
 
     def __init__(self, texture_path: str, speed_factor: float):
         self.texture = arcade.load_texture(texture_path)
@@ -24,7 +24,7 @@ class ParallaxLayer:
         start_tile = int(layer_offset // draw_width)
         draw_x_start = start_tile * draw_width - layer_offset
 
-        # Disegna il layer in tiles orizzontali finché riempie tutta la finestra
+        # Disegna il layer finché riempie tutta la finestra
         x = draw_x_start
         while x < WINDOW_WIDTH:
             arcade.draw_texture_rect(

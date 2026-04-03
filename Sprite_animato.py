@@ -1,11 +1,11 @@
-# ===================== SPRITE ANIMATO =====================
+# Sprite animato (basato sul codice presente in classroom, con alcune modifiche per adattarlo al gioco)
 
 import arcade
 from Costanti import *
 
 
 class SpriteAnimato(arcade.Sprite):
-    """Sprite base con supporto per animazioni da spritesheet."""
+    # Sprite base con supporto per animazioni da spritesheet.
 
     def __init__(self, scala: float = 1.0):
         super().__init__(scale=scala)
@@ -28,7 +28,7 @@ class SpriteAnimato(arcade.Sprite):
         default: bool = False,
         riga: int = 0,
     ):
-        # Carica lo spritesheet e ritaglia i frame della riga indicata
+        # Codice del prof di classroom, se non sbaglio taglia direttamente la spritesheet in base alla griglia specificata
         sheet = arcade.load_spritesheet(percorso)
         offset = riga * colonne
         tutti = sheet.get_texture_grid(

@@ -26,7 +26,7 @@ Software - siti web utilizzati per la creazione del gioco:
 
 
 
-from typing import Self
+
     
 import arcade
 

@@ -1,18 +1,18 @@
-# ===================== PLAYER =====================
+# Player 
 
 from Costanti import *
 from sprite_animato import SpriteAnimato
 
 
 class Player(SpriteAnimato):
-    """Gestisce il personaggio giocabile con le sue animazioni e il flip orizzontale."""
+    # Gestisce il personaggio giocabile con le sue animazioni e il flip orizzontale.
 
     def __init__(self):
         super().__init__(scala=2.0)
         self._in_aria = False
         self._guarda_destra = True     # direzione in cui guarda il personaggio
 
-        # Animazione idle (fermo)
+        # Animazione idle 
         self.aggiungi_animazione(
             nome="idle",
             percorso=PLAYER_IDLE_SOURCE,
@@ -25,7 +25,7 @@ class Player(SpriteAnimato):
             default=True,
         )
 
-        # Animazione walk (corsa)
+        # Animazione walk 
         self.aggiungi_animazione(
             nome="walk",
             percorso=PLAYER_WALK_SOURCE,

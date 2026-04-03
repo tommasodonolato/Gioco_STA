@@ -1,17 +1,17 @@
-# ===================== VIEWS (schermate) =====================
+# Views (schermate di menu, lore, dialogo, vittoria, game over, pausa)
 
 import arcade
 from Costanti import *
 
 
 class MenuView(arcade.View):
-    """Schermata iniziale del gioco con sfondo e pulsante per iniziare."""
+    # Schermata iniziale del gioco con sfondo e pulsante per iniziare.
 
     def __init__(self):
         super().__init__()
         self.background = arcade.load_texture("./game_assets/sfondo_inizio.jpg")
 
-        # Pre-carica le texture usate nel gioco per evitare lag al primo avvio
+        # Pre-carica le texture usate nel gioco per evitare lag al primo avvio, non funziona benissimo, soprattutto col tasto P, però migliora la situazione
         arcade.load_texture(PLAYER_IDLE_SOURCE)
         arcade.load_texture(PLAYER_WALK_SOURCE)
         arcade.load_texture(PLAYER_JUMP_SOURCE)
@@ -31,10 +31,10 @@ class MenuView(arcade.View):
             self.window.show_view(LoreView())
 
 
-# ---------------------------------------------------------------
+
 
 class PauseView(arcade.View):
-    """Schermata di pausa. Invio per riprendere."""
+    # Schermata di pausa. Invio per riprendere.
 
     def __init__(self, game_view):
         super().__init__()
@@ -53,10 +53,10 @@ class PauseView(arcade.View):
             self.window.show_view(self.game_view)  # riprende il gioco
 
 
-# ---------------------------------------------------------------
+
 
 class CommandsView(arcade.View):
-    """Schermata con i comandi del gioco. Invio per iniziare a giocare."""
+    # Schermata con i comandi del gioco. Invio per iniziare a giocare.
 
     def __init__(self):
         super().__init__()
@@ -78,10 +78,10 @@ class CommandsView(arcade.View):
             self.window.show_view(game)
 
 
-# ---------------------------------------------------------------
+
 
 class LoreView(arcade.View):
-    """Schermata della storia iniziale. Premi N per andare avanti."""
+    # Schermata della storia iniziale. Premi N per andare avanti.
 
     def __init__(self):
         super().__init__()
@@ -108,10 +108,9 @@ class LoreView(arcade.View):
                 self.window.show_view(CommandsView())  # finite le slide, mostra i comandi
 
 
-# ---------------------------------------------------------------
 
 class DialogoView(arcade.View):
-    """Schermata di dialogo con la strega. Premi N per avanzare."""
+    # Schermata di dialogo con la strega. Premi N per avanzare.
 
     def __init__(self, game_view):
         super().__init__()
@@ -143,10 +142,9 @@ class DialogoView(arcade.View):
                 self.window.show_view(self.game_view)
 
 
-# ---------------------------------------------------------------
 
 class GameOverView(arcade.View):
-    """Schermata di game over. Invio per tornare al menu."""
+# Schermata di game over. Invio per tornare al menu.
 
     def __init__(self):
         super().__init__()
@@ -164,10 +162,9 @@ class GameOverView(arcade.View):
             self.window.show_view(MenuView())  # torna al menu principale
 
 
-# ---------------------------------------------------------------
 
 class VittoriaView(arcade.View):
-    """Schermata di vittoria. Invio per tornare al menu."""
+    # Schermata di vittoria. Invio per tornare al menu.
 
     def __init__(self):
         super().__init__()

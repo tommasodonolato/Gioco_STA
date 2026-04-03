@@ -1,4 +1,4 @@
-# ===================== GAME VIEW (logica principale) =====================
+# Game View: gestisce il gioco vero e proprio, livelli, fisica, collisioni e fase finale.
 
 import arcade
 from Costanti import *
@@ -8,7 +8,7 @@ from Views import MenuView, PauseView, DialogoView, VittoriaView, GameOverView
 
 
 class GameView(arcade.View):
-    """View principale: gestisce livelli, fisica, collisioni e fase finale."""
+    #View principale: gestisce livelli, fisica, collisioni e fase finale.
 
     def __init__(self):
         super().__init__()
@@ -43,7 +43,7 @@ class GameView(arcade.View):
 
 
     def setup(self):
-        """Inizializza/resetta tutto il gioco dal livello 1."""
+
         self.score = 0
         self.current_level = 1
         self.is_final_level = False
@@ -69,7 +69,7 @@ class GameView(arcade.View):
 
 
     def carica_livello(self, numero: int):
-        """Carica la tilemap del livello indicato e posiziona il giocatore."""
+        # Carica la tilemap del livello indicato e posiziona il giocatore.
         tile_map = arcade.load_tilemap(LEVELS[numero], scaling=TILE_SCALING)
         self.wall_list = tile_map.sprite_lists["Livello tile 1"]
         self.coin_list = tile_map.sprite_lists.get("Monete", arcade.SpriteList())
@@ -92,7 +92,7 @@ class GameView(arcade.View):
 
 
     def livello_successivo(self):
-        """Passa al livello successivo o avvia la fase finale."""
+        # Passa al livello successivo o avvia la fase finale.
         if self.current_level < len(LEVELS):
             self.current_level += 1
             self.carica_livello(self.current_level)
@@ -101,7 +101,7 @@ class GameView(arcade.View):
 
 
     def carica_livello_finale(self):
-        """Configura la fase finale sulla luna con gravità ridotta."""
+        # Configura la fase finale sulla luna con gravità ridotta.
         self.is_final_level = True
 
         # Sostituisce lo sfondo foresta con quello della luna
@@ -123,7 +123,7 @@ class GameView(arcade.View):
         self.strega_sprite = None
         self.fase_finale = 0
 
-        # Pavimento invisibile per la fisica
+        # Pavimento invisibile 
         floor = arcade.SpriteSolidColor(99999, 64, color=(0, 0, 0, 0))
         floor.center_x = self.level_width / 2
         floor.center_y = 32
@@ -137,7 +137,6 @@ class GameView(arcade.View):
         )
 
 
-    # ---------------------------------------------------------------
 
     def on_draw(self):
         self.clear()
@@ -158,7 +157,7 @@ class GameView(arcade.View):
         if self.is_final_level and self.strega_apparsa and self.strega_sprite:
             self.strega_list.draw()
 
-        # L'HUD (punteggio) viene disegnato con la ui_camera in posizione fissa
+        # il punteggio viene disegnato con la ui_camera in posizione fissa
         self.ui_camera.use()
         arcade.draw_text(
             f"MONETE: {self.score}",
@@ -168,7 +167,7 @@ class GameView(arcade.View):
 
 
     def pan_camera_to_player(self):
-        """Segue il giocatore con la camera usando un lerp per un effetto fluido."""
+        # Segue il giocatore con la camera usando un lerp per un effetto fluido.
         if self.is_final_level:
             # Nella fase finale la camera segue solo in orizzontale
             self.camera.position = arcade.math.lerp_2d(
@@ -187,7 +186,6 @@ class GameView(arcade.View):
             )
 
 
-    # ---------------------------------------------------------------
 
     def on_update(self, delta_time):
         self.physics_engine.update()
@@ -256,7 +254,7 @@ class GameView(arcade.View):
         self.pan_camera_to_player()
 
 
-    # ---------------------------------------------------------------
+
 
     def on_key_press(self, key, modifiers):
         # Salto (supporta freccia su, spazio e W)
@@ -275,9 +273,9 @@ class GameView(arcade.View):
         if key == arcade.key.ESCAPE:
             self.window.show_view(PauseView(self))
 
-        # === COMANDI AMMINISTRATORE (solo per testing) ===
+        # COMANDI AMMINISTRATORE 
         if key == arcade.key.Z:
-            self.score = 30                                    # imposta punteggio a 30
+            self.score = 30                                    # imposta monete a 30
         if key == arcade.key.X:
             self.player_sprite.center_x = self.level_width - 60  # teletrasporto alla fine
 
