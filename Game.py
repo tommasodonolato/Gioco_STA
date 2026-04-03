@@ -224,7 +224,7 @@ class MenuView(arcade.View):
         )
     def on_mouse_press(self, x, y, button, modifiers):
         if 440 < x < 840 and 100 < y < 200:
-            self.window.show_view(CommandsView())
+            self.window.show_view(LoreView())
         
 
 class PauseView(arcade.View):
@@ -287,7 +287,7 @@ class LoreView(arcade.View):
         if key == arcade.key.N:
             self.indice += 1
             if self.indice >= len(self.immagini):
-                self.window.show_view(MenuView())      
+                self.window.show_view(CommandsView())      
 
 
 
