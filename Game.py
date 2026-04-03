@@ -264,6 +264,31 @@ class CommandsView(arcade.View):
             game.setup()
             self.window.show_view(game)
 
+class LoreView(arcade.View):
+    def __init__(self):
+        super().__init__()
+        self.immagini = [
+            arcade.load_texture("./Lore/Lore_1.png"),
+            arcade.load_texture("./Lore/Lore_2.png"), 
+            arcade.load_texture("./Lore/Lore_3.png"),
+            arcade.load_texture("./Lore/Lore_4.png"),
+            arcade.load_texture("./Lore/Lore_5.png"),
+        ]
+        self.indice = 0
+
+    def on_draw(self):
+        self.clear()
+        arcade.draw_texture_rect(
+            self.immagini[self.indice],
+            arcade.XYWH(WINDOW_WIDTH/2, WINDOW_HEIGHT/2, WINDOW_WIDTH, WINDOW_HEIGHT)
+        )
+
+    def on_key_press(self, key, modifiers):
+        if key == arcade.key.N:
+            self.indice += 1
+            if self.indice >= len(self.immagini):
+                self.window.show_view(MenuView())      
+
 
 
 class GameView(arcade.View):
