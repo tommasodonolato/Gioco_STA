@@ -1,6 +1,6 @@
 '''
 
-COMANDI AMMINISTRATORE:
+COMANDI AMMINISTRATORE: (non sono indicati nei comandi del gioco, ma possono essere usati per il testing e per passare più velocemnte alla fase finale)
 - Premi "Z" per impostare il punteggio a 30 
 - Premi "X" per teletrasportarti direttamente alla fine del livello 
 
@@ -16,10 +16,10 @@ Software utilizzato per lo sviluppo:
 
 Software - siti web utilizzati per la creazione del gioco:
 - Tiled per la creazione dei livelli
-- Itch.io per la ricerca di asset grafici gratuiti
+- Itch.io per la ricerca di assets grafici
 - AI per la creazione e l'editing di sprite personalizzati (Grok e Gemini) e per la scrittura dei dialoghi (ChatGPT e Gemini)
 - Presentazioni Google per la creazione di sfondi personalizzati e per la scrittura della storia del gioco
-- Paint per la rimozione di backgrounds e l'editing di sprite e sfondi
+- Paint e Remove BG per la rimozione di backgrounds e l'editing di sprite e sfondi
 - W3 Schools, Claude AI e i blog su Classroom per aiuto con la programmazione in Python e l'utilizzo di Arcade
 
 '''
@@ -365,6 +365,9 @@ class GameOverView(arcade.View):
             game = GameView()
             game.setup()
             self.window.show_view(game)
+
+        if key == arcade.key.RETURN:
+            self.window.show_view(MenuView())
 
 
 class VittoriaView(arcade.View):
