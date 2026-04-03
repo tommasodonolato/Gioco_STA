@@ -20,12 +20,16 @@
             }
         },
         "mappa_3.tmx": {
-            "scale": 2.0365624999999996,
+            "scale": 2,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 320.14730704311813,
-                "y": 154.67239527389907
+                "x": 308,
+                "y": 166
             }
+        },
+        "moneta.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
         },
         "nature-paltformer-tileset-16x16.tsx": {
             "scaleInDock": 2,
@@ -46,6 +50,7 @@
     ],
     "project": "tile_gioco.tiled-project",
     "recentFiles": [
+        "moneta.tsx",
         "mappa_1.tmx",
         "mappa_2.tmx",
         "nature-paltformer-tileset-16x16.tsx",

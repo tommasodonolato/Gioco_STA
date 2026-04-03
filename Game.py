@@ -210,6 +210,12 @@ class MenuView(arcade.View):
         super().__init__()
         self.background = arcade.load_texture("./game_assets/sfondo_inizio.jpg")
 
+        arcade.load_texture(PLAYER_IDLE_SOURCE)
+        arcade.load_texture(PLAYER_WALK_SOURCE)
+        arcade.load_texture(PLAYER_JUMP_SOURCE)
+        for path, _ in FINAL_BG_LAYERS:
+            arcade.load_texture(path)
+
     def on_draw(self):
         self.clear()
         arcade.draw_texture_rect(
