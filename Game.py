@@ -397,9 +397,9 @@ class GameView(arcade.View):
 
         self.ui_camera.use()
         arcade.draw_text(
-            f"Monete: {self.score}",
+            f"MONETE: {self.score}",
             20, WINDOW_HEIGHT - 40,
-            arcade.color.GOLD, 20, font_name = "Press Start 2P"
+            arcade.color.GOLD, 20, font_name = "Courier New", bold = True
         )
 
 
