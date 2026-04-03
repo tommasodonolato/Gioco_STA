@@ -106,7 +106,7 @@ class SpriteAnimato(arcade.Sprite):
         elif anim["loop"]:
             self.indice_frame = 0
         else:
-            self._vai(self.animazione_default)
+            self.indice_frame = len(anim["textures"]) - 1
             return
         self.texture = anim["textures"][self.indice_frame]
 
@@ -115,6 +115,7 @@ class SpriteAnimato(arcade.Sprite):
 class Player(SpriteAnimato):
     def __init__(self):
         super().__init__(scala=2.0)
+        self._in_aria = False
 
         self.aggiungi_animazione(
             nome="idle",
@@ -155,24 +156,28 @@ class Player(SpriteAnimato):
         self._guarda_destra = True
 
     def update_animation(self, delta_time: float = 1 / 60):
-
+    # Flip sinistra/destra
         if self.change_x > 0:
             self._guarda_destra = True
         elif self.change_x < 0:
             self._guarda_destra = False
 
         self.scale = (abs(self.scale[0]) if self._guarda_destra
-                      else -abs(self.scale[0]), abs(self.scale[1]))
+                    else -abs(self.scale[0]), abs(self.scale[1]))
 
+    # Scelta animazione
         if abs(self.change_y) > 1.5:
-            self.imposta_animazione("jump")
-        elif self.change_x != 0:
-            self.imposta_animazione("walk")
+            self._in_aria = True
+            if self.animazione_corrente != "jump":
+                self.imposta_animazione("jump")
         else:
-            self.imposta_animazione("idle")
+            self._in_aria = False
+            if self.change_x != 0:
+                self.imposta_animazione("walk")
+            else:
+                self.imposta_animazione("idle")
 
         super().update_animation(delta_time)
-
 
 
 class ParallaxLayer:
@@ -200,12 +205,46 @@ class ParallaxLayer:
             )
             x += draw_width
 
-
-
-class GameView(arcade.Window):
-
+class MenuView(arcade.View):
     def __init__(self):
-        super().__init__(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE)
+        super().__init__()
+        self.background = arcade.load_texture("./game_assets/sfondo_inizio.jpg")
+
+    def on_draw(self):
+        self.clear()
+        arcade.draw_texture_rect(
+            self.background,
+            arcade.XYWH(WINDOW_WIDTH/2, WINDOW_HEIGHT/2, WINDOW_WIDTH, WINDOW_HEIGHT)
+        )
+    def on_key_press(self, key, modifiers):
+        if key == arcade.key.RETURN:
+            self.window.show_view(CommandsView())
+
+
+class CommandsView(arcade.View):
+    def __init__(self):
+        super().__init__()
+        self.background = arcade.load_texture("./game_assets/comandi.png")
+
+    def on_draw(self):
+        self.clear()
+        arcade.draw_texture_rect(
+            self.background,
+            arcade.XYWH(WINDOW_WIDTH/2, WINDOW_HEIGHT/2, WINDOW_WIDTH, WINDOW_HEIGHT)
+        )
+
+    def on_key_press(self, key, modifiers):
+        if key == arcade.key.RETURN:
+            game = GameView()
+            game.setup()
+            self.window.show_view(game)
+
+
+
+class GameView(arcade.View):
+    
+    def __init__(self):
+        super().__init__()
 
         self.player_sprite: Player | None = None
         self.player_list = None
@@ -407,6 +446,8 @@ class GameView(arcade.Window):
             self.player_sprite.change_x = PLAYER_MOVEMENT_SPEED
         if key == arcade.key.F:
             self.player_sprite.center_x = self.level_width - 60
+        if key == arcade.key.ESCAPE:
+            self.window.show_view(MenuView())
 
 
 
@@ -419,8 +460,8 @@ class GameView(arcade.Window):
 
 
 def main():
-    window = GameView()
-    window.setup()
+    window = arcade.Window(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE)
+    window.show_view(MenuView())
     arcade.run()
 
 
