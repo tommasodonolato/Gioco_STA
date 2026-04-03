@@ -1,5 +1,5 @@
 {
-    "activeFile": "mappa_3.tmx",
+    "activeFile": "mappa_2.tmx",
     "expandedProjectPaths": [
     ],
     "fileStates": {
@@ -8,7 +8,7 @@
             "selectedLayer": 0,
             "viewCenter": {
                 "x": 320.14730704311813,
-                "y": 154.67239527389907
+                "y": 183.6427804204389
             }
         },
         "mappa_2.tmx": {
@@ -16,7 +16,7 @@
             "selectedLayer": 0,
             "viewCenter": {
                 "x": 320.14730704311813,
-                "y": 154.67239527389907
+                "y": 183.6427804204389
             }
         },
         "mappa_3.tmx": {
@@ -47,9 +47,9 @@
     "project": "tile_gioco.tiled-project",
     "recentFiles": [
         "mappa_1.tmx",
-        "mappa_2.tmx",
         "nature-paltformer-tileset-16x16.tsx",
-        "mappa_3.tmx"
+        "mappa_3.tmx",
+        "mappa_2.tmx"
     ],
     "tileset.lastUsedFormat": "tsx",
     "tileset.tileSize": {

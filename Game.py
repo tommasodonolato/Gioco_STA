@@ -315,8 +315,8 @@ class GameView(arcade.Window):
             self.player_sprite.left = 0
 
         if self.player_sprite.center_y < -100:
-            self.player_sprite.center_x = 100
-            self.player_sprite.center_y = 200
+            self.current_level = 1
+            self.carica_livello(self.current_level)
 
         if self.player_sprite.center_x > self.level_width - 50:
             self.livello_successivo()
@@ -337,6 +337,10 @@ class GameView(arcade.Window):
             self.player_sprite.change_x = 0
         if key == arcade.key.P:
             self.setup()
+        if key == arcade.key.B:
+            if self.current_level > 1:
+                self.current_level -= 1
+                self.carica_livello(self.current_level)
 
 
 def main():
