@@ -1,8 +1,8 @@
 '''
 
 COMANDI AMMINISTRATORE:
-- Premi "G" per impostare il punteggio a 30 
-- Premi "F" per teletrasportarti direttamente alla fine del livello 
+- Premi "Z" per impostare il punteggio a 30 
+- Premi "X" per teletrasportarti direttamente alla fine del livello 
 
 Gioco ideato e sviluppato da Tommaso Donolato
 
@@ -630,13 +630,13 @@ class GameView(arcade.View):
         elif key in (arcade.key.RIGHT, arcade.key.D):
             self.player_sprite.change_x = PLAYER_MOVEMENT_SPEED
 
-        if key == arcade.key.F:
+        if key == arcade.key.X:
             self.player_sprite.center_x = self.level_width - 60
 
         if key == arcade.key.ESCAPE:
             self.window.show_view(PauseView(self))
 
-        if key == arcade.key.G:
+        if key == arcade.key.Z:
             self.score = 30
 
 
