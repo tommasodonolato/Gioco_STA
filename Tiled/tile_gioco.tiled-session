@@ -5,7 +5,7 @@
     "fileStates": {
         "mappa_1.tmx": {
             "scale": 2.0365624999999996,
-            "selectedLayer": 0,
+            "selectedLayer": 1,
             "viewCenter": {
                 "x": 320.14730704311813,
                 "y": 183.6427804204389
@@ -13,7 +13,7 @@
         },
         "mappa_2.tmx": {
             "scale": 2.0365624999999996,
-            "selectedLayer": 0,
+            "selectedLayer": 1,
             "viewCenter": {
                 "x": 320.14730704311813,
                 "y": 183.6427804204389
@@ -21,7 +21,7 @@
         },
         "mappa_3.tmx": {
             "scale": 2,
-            "selectedLayer": 0,
+            "selectedLayer": 1,
             "viewCenter": {
                 "x": 308,
                 "y": 166

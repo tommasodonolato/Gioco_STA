@@ -317,10 +317,11 @@ class GameView(arcade.View):
     def carica_livello(self, numero: int):
 
         tile_map = arcade.load_tilemap(LEVELS[numero], scaling=TILE_SCALING)
+        print("Layer trovati:", list(tile_map.sprite_lists.keys()))
 
         self.wall_list = tile_map.sprite_lists["Livello tile 1"]
 
-        self.coin_list = tile_map.sprite_lists.get("monete", arcade.SpriteList())
+        self.coin_list = tile_map.sprite_lists.get("Monete", arcade.SpriteList())
 
         self.level_width = tile_map.width * tile_map.tile_width * TILE_SCALING
   
