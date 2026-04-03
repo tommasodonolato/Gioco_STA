@@ -4,14 +4,20 @@
     ],
     "fileStates": {
         "mappa_1.tmx": {
+            "expandedObjectLayers": [
+                4
+            ],
             "scale": 2.0365624999999996,
-            "selectedLayer": 1,
+            "selectedLayer": 2,
             "viewCenter": {
                 "x": 320.14730704311813,
                 "y": 183.6427804204389
             }
         },
         "mappa_2.tmx": {
+            "expandedObjectLayers": [
+                3
+            ],
             "scale": 2.0365624999999996,
             "selectedLayer": 1,
             "viewCenter": {
@@ -20,6 +26,9 @@
             }
         },
         "mappa_3.tmx": {
+            "expandedObjectLayers": [
+                3
+            ],
             "scale": 2,
             "selectedLayer": 1,
             "viewCenter": {
