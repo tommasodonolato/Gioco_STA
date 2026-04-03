@@ -200,15 +200,13 @@ class GameView(arcade.Window):
         self.wall_list = None
         self.coin_list = None
         self.physics_engine = None
-
         self.camera = None
         self.ui_camera = None
         self.parallax_layers = []
-
         self.score = 0
-
         self.current_level = 1
         self.level_width = WINDOW_WIDTH
+        self.spawn_destra = True
 
     def setup(self):
         self.score = 0
@@ -240,25 +238,27 @@ class GameView(arcade.Window):
 
         tile_map = arcade.load_tilemap(LEVELS[numero], scaling=TILE_SCALING)
 
-    
         self.wall_list = tile_map.sprite_lists["Livello tile 1"]
 
-    
         self.coin_list = tile_map.sprite_lists.get("monete", arcade.SpriteList())
 
-
         self.level_width = tile_map.width * tile_map.tile_width * TILE_SCALING
-
   
-        self.player_sprite.center_x = 100
-        self.player_sprite.center_y = 400
+        if self.spawn_destra:
+            self.player_sprite.center_x = 100
+            self.player_sprite.center_y = 400
+        else:
+            self.player_sprite.center_x = self.level_width - 100
+            self.player_sprite.center_y = 400
 
-        
         self.physics_engine = arcade.PhysicsEnginePlatformer(
             self.player_sprite,
             platforms=self.wall_list,
             gravity_constant=GRAVITY
         )
+        target_x = max(self.player_sprite.center_x, 0)
+        target_x = min(target_x, self.level_width - WINDOW_WIDTH / 2)
+        self.camera.position = (WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2)
 
     def livello_successivo(self):
         if self.current_level < len(LEVELS):
@@ -312,13 +312,20 @@ class GameView(arcade.Window):
             self.score += 1
 
         if self.player_sprite.left < 0:
-            self.player_sprite.left = 0
+            if self.current_level > 1:
+                self.current_level -= 1
+                self.spawn_destra = False
+                self.carica_livello(self.current_level)
+            else:
+                self.player_sprite.left = 0
 
         if self.player_sprite.center_y < -100:
             self.current_level = 1
+            self.spawn_destra = True
             self.carica_livello(self.current_level)
 
         if self.player_sprite.center_x > self.level_width - 50:
+            self.spawn_destra = True
             self.livello_successivo()
 
         self.pan_camera_to_player()
@@ -337,10 +344,7 @@ class GameView(arcade.Window):
             self.player_sprite.change_x = 0
         if key == arcade.key.P:
             self.setup()
-        if key == arcade.key.B:
-            if self.current_level > 1:
-                self.current_level -= 1
-                self.carica_livello(self.current_level)
+
 
 
 def main():
