@@ -216,9 +216,28 @@ class MenuView(arcade.View):
             self.background,
             arcade.XYWH(WINDOW_WIDTH/2, WINDOW_HEIGHT/2, WINDOW_WIDTH, WINDOW_HEIGHT)
         )
+    def on_mouse_press(self, x, y, button, modifiers):
+        if 440 < x < 840 and 100 < y < 200:
+            self.window.show_view(CommandsView())
+        
+
+class PauseView(arcade.View):
+    def __init__(self, game_view):
+        super().__init__()
+        self.game_view = game_view  
+        self.background = arcade.load_texture("./game_assets/pausa.png")
+
+    def on_draw(self):
+        self.clear()
+        arcade.draw_texture_rect(
+            self.background,
+            arcade.XYWH(WINDOW_WIDTH/2, WINDOW_HEIGHT/2, WINDOW_WIDTH, WINDOW_HEIGHT)
+        )
+
     def on_key_press(self, key, modifiers):
         if key == arcade.key.RETURN:
-            self.window.show_view(CommandsView())
+            self.window.show_view(self.game_view)
+
 
 
 class CommandsView(arcade.View):
@@ -447,7 +466,7 @@ class GameView(arcade.View):
         if key == arcade.key.F:
             self.player_sprite.center_x = self.level_width - 60
         if key == arcade.key.ESCAPE:
-            self.window.show_view(MenuView())
+            self.window.show_view(PauseView(self))
 
 
 

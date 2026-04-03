@@ -1,5 +1,5 @@
 {
-    "activeFile": "mappa_2.tmx",
+    "activeFile": "mappa_3.tmx",
     "expandedProjectPaths": [
     ],
     "fileStates": {
@@ -47,9 +47,9 @@
     "project": "tile_gioco.tiled-project",
     "recentFiles": [
         "mappa_1.tmx",
+        "mappa_2.tmx",
         "nature-paltformer-tileset-16x16.tsx",
-        "mappa_3.tmx",
-        "mappa_2.tmx"
+        "mappa_3.tmx"
     ],
     "tileset.lastUsedFormat": "tsx",
     "tileset.tileSize": {
