@@ -1,11 +1,13 @@
-#  COMANDI AMMINISTRATORE:
-#  - "F" per teletrasportarsi alla fine del livello 
-#  - "G" per portare le monete a 30
+'''
+COMANDI AMMINISTRATORE:
+- Premi "G" per impostare il punteggio a 30 
+- Premi "F" per teletrasportarti direttamente alla fine del livello 
+'''
 
 
 
 from typing import Self
-
+    
 import arcade
 
 WINDOW_WIDTH = 1280
