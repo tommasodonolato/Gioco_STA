@@ -614,6 +614,9 @@ class GameView(arcade.View):
         if key == arcade.key.ESCAPE:
             self.window.show_view(PauseView(self))
 
+        if key == arcade.key.G:
+            self.score = 30
+
 
 
     def on_key_release(self, key, modifiers):
