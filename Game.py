@@ -1,3 +1,9 @@
+#  COMANDI AMMINISTRATORE:
+#  - "F" per teletrasportarsi alla fine del livello 
+#  - "G" per portare le monete a 30
+
+
+
 from typing import Self
 
 import arcade
