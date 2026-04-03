@@ -30,7 +30,12 @@ PLAYER_FRAME_HEIGHT = 64
 PLAYER_NUM_FRAME    = 8   
 
 FINAL_BACKGROUNDS_LEVEL = [
-    ()
+    ("./Sfondi_parallasse/moon/moon_sky.png", speed_factor=0.05),
+    ("./Sfondi_parallasse/moon/moon_earth.png", speed_factor=0.10),
+    ("./Sfondi_parallasse/moon/moon_back.png", speed_factor=0.20),
+    ("./Sfondi_parallasse/moon/moon_mid.png", speed_factor=0.35),
+    ("./Sfondi_parallasse/moon/moon_front.png", speed_factor=0.55),
+    ("./Sfondi_parallasse/moon/moon_floor.png", speed_factor=0.80),
 ]
 
 class SpriteAnimato(arcade.Sprite):
@@ -224,11 +229,11 @@ class GameView(arcade.Window):
         self.ui_camera = arcade.Camera2D()
 
         self.parallax_layers = [
-            ParallaxLayer("./forest/forest_sky.png",      speed_factor=0.10),
-            ParallaxLayer("./forest/forest_mountain.png", speed_factor=0.20),
-            ParallaxLayer("./forest/forest_back.png",     speed_factor=0.35),
-            ParallaxLayer("./forest/forest_mid.png",      speed_factor=0.50),
-            ParallaxLayer("./forest/forest_short.png",    speed_factor=0.70),
+            ParallaxLayer("./Sfondi_parallasse/forest/forest_sky.png",      speed_factor=0.10),
+            ParallaxLayer("./Sfondi_parallasse/forest/forest_mountain.png", speed_factor=0.20),
+            ParallaxLayer("./Sfondi_parallasse/forest/forest_back.png",     speed_factor=0.35),
+            ParallaxLayer("./Sfondi_parallasse/forest/forest_mid.png",      speed_factor=0.50),
+            ParallaxLayer("./Sfondi_parallasse/forest/forest_short.png",    speed_factor=0.70),
         ]
 
         self.player_sprite = Player()
