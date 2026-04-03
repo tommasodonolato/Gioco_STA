@@ -309,6 +309,11 @@ class GameView(arcade.View):
         self.level_width = WINDOW_WIDTH
         self.spawn_destra = True
         self.is_final_level = False
+        self.timer_strega = 0
+        self.strega_apparsa = False
+        self.strega_sprite = None
+        self.fase_finale = 0
+
 
 
 
@@ -392,6 +397,11 @@ class GameView(arcade.View):
         self.player_sprite.center_x = 100
         self.player_sprite.center_y = 200
 
+        self.timer_strega = 0
+        self.strega_apparsa = False
+        self.strega_sprite = None
+        self.fase_finale = 0
+
         floor = arcade.SpriteSolidColor(99999, 64, color = (0, 0, 0, 0))
         floor.center_x = self.level_width / 2
         floor.center_y = 32
@@ -419,6 +429,9 @@ class GameView(arcade.View):
         self.wall_list.draw()
         self.coin_list.draw()
         self.player_list.draw()
+
+        if self.is_final_level and self.strega_apparsa and self.strega_sprite:
+            self.strega_sprite.draw()
 
         self.ui_camera.use()
         arcade.draw_text(
@@ -482,6 +495,27 @@ class GameView(arcade.View):
             if not self.is_final_level:
                 self.spawn_destra = True
                 self.livello_successivo()
+
+        if self.is_final_level:
+            self.timer_strega += delta_time
+            if self.timer_strega > 5 and not self.strega_apparsa:
+                self.strega_apparsa = True
+                self.strega_sprite = arcade.Sprite("sprite strega", scale = 2)
+                self.strega_sprite.center_x = 1100
+                self.strega_sprite.center_y = 600
+        
+        if self.strega_apparsa and self.strega_sprite:
+            if arcade.check_for_collision(self.player_sprite, self.strega_sprite):
+                if self.fase_finale == 0:
+                    self.fase_finale = 1
+                    self.window.show_view(DialogoView())
+
+        if self.fase_finale == 2 and self.strega_sprite:
+            if self.strega_sprite.center_y > 200:
+                self.strega_sprite.center_y -= 2
+            else:
+                self.fase_finale = 3
+                self.window.show_view(VittoriaView())
 
         self.pan_camera_to_player()
 
