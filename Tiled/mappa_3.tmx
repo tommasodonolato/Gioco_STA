@@ -2,7 +2,6 @@
 <map version="1.10" tiledversion="1.12.1" orientation="orthogonal" renderorder="right-down" width="40" height="23" tilewidth="16" tileheight="16" infinite="0" nextlayerid="4" nextobjectid="14">
  <tileset firstgid="1" source="nature-paltformer-tileset-16x16.tsx"/>
  <tileset firstgid="78" source="moneta.tsx"/>
- <tileset firstgid="79" source="moneta.tsx"/>
  <layer id="1" name="Livello tile 1" width="40" height="23">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -31,7 +30,7 @@
 </data>
  </layer>
  <objectgroup id="3" name="Monete">
-  <object id="2" gid="78" x="128" y="224" width="16" height="16"/>
+  <object id="2" gid="78" x="94" y="218.5" width="16" height="16"/>
   <object id="3" gid="78" x="78" y="80.5" width="16" height="16"/>
   <object id="4" gid="78" x="111.5" y="78" width="16" height="16"/>
   <object id="5" gid="78" x="241" y="146" width="16" height="16"/>
