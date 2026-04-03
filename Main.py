@@ -1,7 +1,4 @@
-# Main 
-
 '''
-
 COMANDI AMMINISTRATORE: (non sono indicati nei comandi del gioco, ma possono essere usati per il testing e per passare più velocemnte alla fase finale)
 - Premi "Z" per impostare il punteggio a 30 
 - Premi "X" per teletrasportarti direttamente alla fine del livello 
