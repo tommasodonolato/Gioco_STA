@@ -24,10 +24,7 @@ Software - siti web utilizzati per la creazione del gioco:
 
 '''
 
-
-
-
-    
+  
 import arcade
 
 WINDOW_WIDTH = 1280
