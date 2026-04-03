@@ -563,7 +563,7 @@ class GameView(arcade.View):
             self.timer_strega += delta_time
             if self.timer_strega > 5 and not self.strega_apparsa:
                 self.strega_apparsa = True
-                self.strega_sprite = arcade.Sprite("sprite strega", scale = 2)
+                self.strega_sprite = arcade.Sprite("./game_assets/strega.png", scale = 2)
                 self.strega_sprite.center_x = 1100
                 self.strega_sprite.center_y = 600
         
