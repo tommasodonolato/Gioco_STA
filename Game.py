@@ -40,7 +40,7 @@ FINAL_BG_LAYERS = [
     ("./Sfondi_parallasse/moon/moon_floor.png", 0.80),
 ]
 
-PLAYER_JUMP_SPEED_LUNA = 20
+PLAYER_JUMP_SPEED_LUNA = 13
 
 class SpriteAnimato(arcade.Sprite):
     def __init__(self, scala: float = 1.0):
@@ -155,7 +155,7 @@ class Player(SpriteAnimato):
         self._guarda_destra = True
 
     def update_animation(self, delta_time: float = 1 / 60):
-        # Flip sinistra/destra
+
         if self.change_x > 0:
             self._guarda_destra = True
         elif self.change_x < 0:
@@ -164,8 +164,7 @@ class Player(SpriteAnimato):
         self.scale = (abs(self.scale[0]) if self._guarda_destra
                       else -abs(self.scale[0]), abs(self.scale[1]))
 
-        # Priorità: salto > corsa > idle
-        if self.change_y != 0:
+        if abs(self.change_y) > 1.5:
             self.imposta_animazione("jump")
         elif self.change_x != 0:
             self.imposta_animazione("walk")
@@ -301,16 +300,16 @@ class GameView(arcade.Window):
         self.level_width = 99999
 
         self.player_sprite.center_x = 100
-        self.player_sprite.center_y = 400
+        self.player_sprite.center_y = 200
 
-        floor = arcade.SpriteSolidColor(99999, 32, color = (0,0,0,0))
+        floor = arcade.SpriteSolidColor(99999, 64, color = (0, 0, 0, 0))
         floor.center_x = self.level_width / 2
-        floor.center_y = 16
+        floor.center_y = 32
         self.wall_list.append(floor)
 
         self.physics_engine = arcade.PhysicsEnginePlatformer(
             self.player_sprite,
-            platforms = self.wall_list,
+            platforms = self.wall_list, 
             gravity_constant = 0.2
         )
   
@@ -342,10 +341,9 @@ class GameView(arcade.Window):
 
     def pan_camera_to_player(self):
         if self.is_final_level:
-           
             self.camera.position = arcade.math.lerp_2d(
                 self.camera.position,
-                (self.player_sprite.center_x, self.player_sprite.center_y),
+                (self.player_sprite.center_x, WINDOW_HEIGHT / 2),
                 CAMERA_SPEED
             )
         else:
