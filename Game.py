@@ -317,7 +317,7 @@ class GameView(arcade.View):
     def carica_livello(self, numero: int):
 
         tile_map = arcade.load_tilemap(LEVELS[numero], scaling=TILE_SCALING)
-        print("Layer trovati:", list(tile_map.sprite_lists.keys()))
+        self.wall_list = tile_map.sprite_lists["Livello tile 1"]
 
         self.wall_list = tile_map.sprite_lists["Livello tile 1"]
 
@@ -399,7 +399,7 @@ class GameView(arcade.View):
         arcade.draw_text(
             f"Monete: {self.score}",
             20, WINDOW_HEIGHT - 40,
-            arcade.color.WHITE, 20, bold=True
+            arcade.color.GOLD, 20, font_name = "Press Start 2P"
         )
 
 
@@ -449,6 +449,7 @@ class GameView(arcade.View):
                 self.player_sprite.center_y = 400  
             else:
                 self.current_level = 1
+                self.score = 0
                 self.spawn_destra = True
                 self.carica_livello(self.current_level)
 
@@ -463,23 +464,31 @@ class GameView(arcade.View):
 
     def on_key_press(self, key, modifiers):
         if key in (arcade.key.UP, arcade.key.SPACE, arcade.key.W):
+
             if self.physics_engine.can_jump():
+
                 jump_speed = PLAYER_JUMP_SPEED_LUNA if self.is_final_level else PLAYER_JUMP_SPEED
                 self.player_sprite.change_y = jump_speed
+
         elif key in (arcade.key.LEFT, arcade.key.A):
             self.player_sprite.change_x = -PLAYER_MOVEMENT_SPEED
+
         elif key in (arcade.key.RIGHT, arcade.key.D):
             self.player_sprite.change_x = PLAYER_MOVEMENT_SPEED
+
         if key == arcade.key.F:
             self.player_sprite.center_x = self.level_width - 60
+
         if key == arcade.key.ESCAPE:
             self.window.show_view(PauseView(self))
 
 
 
     def on_key_release(self, key, modifiers):
+
         if key in (arcade.key.LEFT, arcade.key.A, arcade.key.RIGHT, arcade.key.D):
             self.player_sprite.change_x = 0
+
         if key == arcade.key.P:
             self.setup()
 

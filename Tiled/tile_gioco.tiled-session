@@ -55,13 +55,14 @@
         "mappa_1.tmx",
         "mappa_2.tmx",
         "mappa_3.tmx",
-        "nature-paltformer-tileset-16x16.tsx"
+        "nature-paltformer-tileset-16x16.tsx",
+        "moneta.tsx"
     ],
     "project": "tile_gioco.tiled-project",
     "recentFiles": [
-        "moneta.tsx",
         "mappa_1.tmx",
         "mappa_2.tmx",
+        "moneta.tsx",
         "nature-paltformer-tileset-16x16.tsx",
         "mappa_3.tmx"
     ],
