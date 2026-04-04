@@ -20,6 +20,7 @@ Software - siti web utilizzati per la creazione del gioco:
 - Presentazioni Google per la creazione di sfondi personalizzati e per la scrittura della storia del gioco
 - Paint e Remove BG per la rimozione di backgrounds e l'editing di sprite e sfondi
 - W3 Schools, Claude AI e i blog su Classroom per aiuto con la programmazione in Python e l'utilizzo di Arcade
+- Free Sound per la ricerca di effetti sonori
 
 '''
 
