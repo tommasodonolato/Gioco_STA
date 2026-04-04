@@ -104,6 +104,10 @@ class GameView(arcade.View):
         # Configura la fase finale sulla luna con gravità ridotta.
         self.is_final_level = True
 
+        # Passa alla musica della luna
+        from Views import cambia_musica
+        cambia_musica(self.window, MUSIC_LUNA)
+
         # Sostituisce lo sfondo foresta con quello della luna
         self.parallax_layers = [
             ParallaxLayer(path, speed)

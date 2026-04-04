@@ -4,12 +4,36 @@ import arcade
 from Costanti import *
 
 
+def stoppa_musica(window):
+    # Stoppa la musica corrente senza avviarne una nuova.
+
+    if window.music_player and window.music_sound:
+        window.music_sound.stop(window.music_player) 
+
+    window.music_player = None
+    window.music_sound = None
+
+
+def cambia_musica(window, percorso: str, volume: float = 0.5):
+    # Stoppa la musica corrente e avvia quella nuova in loop.
+    # Stoppa la musica precedente se ce n'è una
+
+    if window.music_player and window.music_sound:
+        window.music_sound.stop(window.music_player)
+
+    # Carica e avvia la nuova musica in loop
+
+    window.music_sound = arcade.Sound(percorso)
+    window.music_player = window.music_sound.play(loop=True, volume=volume)
+
+
 class MenuView(arcade.View):
     # Schermata iniziale del gioco con sfondo e pulsante per iniziare.
 
     def __init__(self):
         super().__init__()
         self.background = arcade.load_texture("./game_assets/sfondo_inizio.jpg")
+        cambia_musica(self.window, MUSIC_DIALOGO)  # avvia la musica sin da subito
 
         # Pre-carica le texture usate nel gioco per evitare lag al primo avvio, non funziona benissimo, soprattutto col tasto P, però migliora la situazione
         arcade.load_texture(PLAYER_IDLE_SOURCE)
@@ -71,6 +95,7 @@ class CommandsView(arcade.View):
 
     def on_key_press(self, key, modifiers):
         if key == arcade.key.RETURN:
+            cambia_musica(self.window, MUSIC_PLATFORMER)
             # Import qui per evitare import circolare con game_view.py
             from Game_view import GameView
             game = GameView()
@@ -159,6 +184,7 @@ class GameOverView(arcade.View):
 
     def on_key_press(self, key, modifiers):
         if key == arcade.key.RETURN:
+            stoppa_musica(self.window)  # stoppa la musica
             self.window.show_view(MenuView())  # torna al menu principale
 
 
@@ -179,4 +205,6 @@ class VittoriaView(arcade.View):
 
     def on_key_press(self, key, modifiers):
         if key == arcade.key.RETURN:
+            stoppa_musica(self.window)  # stoppa la musica
             self.window.show_view(MenuView())  # torna al menu principale
+           

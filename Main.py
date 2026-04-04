@@ -31,6 +31,8 @@ from Views import MenuView
 
 def main():
     window = arcade.Window(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE)
+    window.music_player = None  
+    window.music_sound = None
     window.show_view(MenuView())
     arcade.run()
 
