@@ -436,12 +436,12 @@ class GameView(arcade.View):
 
         self.carica_livello(self.current_level)
 
-
+  
     
     def carica_livello(self, numero: int):
 
         tile_map = arcade.load_tilemap(LEVELS[numero], scaling=TILE_SCALING)
-        self.wall_list = tile_map.sprite_lists["Livello tile 1"]
+        
 
         self.wall_list = tile_map.sprite_lists["Livello tile 1"]
 
