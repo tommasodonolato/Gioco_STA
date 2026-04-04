@@ -593,9 +593,9 @@ class GameView(arcade.View):
             if self.timer_strega > 5 and not self.strega_apparsa:
                 self.strega_apparsa = True
                 self.strega_sprite = arcade.Sprite("./game_assets/strega.png", scale = 2)
-                self.strega_sprite.center_x = 1100
+                self.strega_sprite.center_x = self.player_sprite.center_x + 1000
                 self.strega_sprite.center_y = 600
-                self.strega_list = arcade.SpriteList()  
+                self.strega_list = arcade.SpriteList()
                 self.strega_list.append(self.strega_sprite)
         
         if self.strega_apparsa and self.strega_sprite:
