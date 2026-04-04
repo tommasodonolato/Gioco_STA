@@ -434,6 +434,7 @@ class GameView(arcade.View):
         self.strega_list = arcade.SpriteList()
         self.sfx_magic_sound = None
         self.sfx_magic_player = None
+        self.sfx_magic_started = False
 
     def setup(self):
         self.score = 0
@@ -606,12 +607,16 @@ class GameView(arcade.View):
                 stoppa_musica(self.window)
                 self.sfx_magic_sound = arcade.Sound(SFX_MAGIC)
                 self.sfx_magic_player = self.sfx_magic_sound.play(volume=40)
+                self.sfx_magic_started = False
 
         if self.sfx_magic_player and self.sfx_magic_sound:
-            if not self.sfx_magic_sound.is_playing(self.sfx_magic_player):
+            if self.sfx_magic_sound.is_playing(self.sfx_magic_player):
+                self.sfx_magic_started = True
+            elif self.sfx_magic_started:
                 cambia_musica(self.window, MUSIC_LUNA)
                 self.sfx_magic_player = None
                 self.sfx_magic_sound = None
+                self.sfx_magic_started = False
 
         if self.strega_apparsa and self.strega_sprite:
             if arcade.check_for_collision(self.player_sprite, self.strega_sprite):
@@ -655,6 +660,7 @@ class GameView(arcade.View):
 
         if key == arcade.key.P:
             self.setup()
+            cambia_musica(self.window, MUSIC_PLATFORMER)
 
 
 def main():
