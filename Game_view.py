@@ -260,7 +260,7 @@ class GameView(arcade.View):
         # Salto (supporta freccia su, spazio e W)
         if key in (arcade.key.UP, arcade.key.SPACE, arcade.key.W):
             if self.physics_engine.can_jump():
-                jump_speed = PLAYER_JUMP_SPEED_LUNA if self.is_final_level else PLAYER_JUMP_SPEED
+                jump_speed = PLAYER_JUMP_SPEED
                 self.player_sprite.change_y = jump_speed
 
         elif key in (arcade.key.LEFT, arcade.key.A):

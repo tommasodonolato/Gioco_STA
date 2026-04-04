@@ -65,7 +65,6 @@ FINAL_BG_LAYERS = [
     ("./Sfondi_parallasse/moon/moon_floor.png", 0.80),
 ]
 
-PLAYER_JUMP_SPEED_LUNA = 13
 
 class SpriteAnimato(arcade.Sprite):
     def __init__(self, scala: float = 1.0):
@@ -621,7 +620,7 @@ class GameView(arcade.View):
 
             if self.physics_engine.can_jump():
 
-                jump_speed = PLAYER_JUMP_SPEED_LUNA if self.is_final_level else PLAYER_JUMP_SPEED
+                jump_speed = PLAYER_JUMP_SPEED
                 self.player_sprite.change_y = jump_speed
 
         elif key in (arcade.key.LEFT, arcade.key.A):

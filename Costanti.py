@@ -16,8 +16,6 @@ PLAYER_JUMP_SPEED = 13
 GRAVITY = 1
 CAMERA_SPEED = 0.1
 
-# Velocità di salto nella fase finale (luna)
-PLAYER_JUMP_SPEED_LUNA = 13
 
 # Percorsi dei file tmx dei livelli
 LEVELS = {
