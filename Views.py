@@ -128,6 +128,7 @@ class LoreView(arcade.View):
 
     def on_key_press(self, key, modifiers):
         if key == arcade.key.N:
+            arcade.Sound(SFX_DIALOGO).play()  # suona l'effetto di avanzamento dialogo
             self.indice += 1
             if self.indice >= len(self.immagini):
                 self.window.show_view(CommandsView())  # finite le slide, mostra i comandi
@@ -156,6 +157,7 @@ class DialogoView(arcade.View):
 
     def on_key_press(self, key, modifiers):
         if key == arcade.key.N:
+            arcade.Sound(SFX_DIALOGO).play()  # suona l'effetto di avanzamento dialogo
             self.indice += 1
             # Alla seconda slide controlla se il giocatore ha abbastanza monete
             if self.indice == 2:
@@ -174,6 +176,8 @@ class GameOverView(arcade.View):
     def __init__(self):
         super().__init__()
         self.background = arcade.load_texture("./game_assets/Game_over.png")
+        stoppa_musica(self.window)  # stoppa la musica
+        arcade.Sound(SFX_LOSE).play()  # suona l'effetto di sconfitta
 
     def on_draw(self):
         self.clear()

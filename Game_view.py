@@ -4,7 +4,7 @@ import arcade
 from Costanti import *
 from Player import Player
 from Parallax import ParallaxLayer
-from Views import MenuView, PauseView, DialogoView, VittoriaView, GameOverView
+from Views import MenuView, PauseView, DialogoView, VittoriaView, GameOverView, cambia_musica, stoppa_musica
 
 
 class GameView(arcade.View):
@@ -105,7 +105,6 @@ class GameView(arcade.View):
         self.is_final_level = True
 
         # Passa alla musica della luna
-        from Views import cambia_musica
         cambia_musica(self.window, MUSIC_LUNA)
 
         # Sostituisce lo sfondo foresta con quello della luna
@@ -199,6 +198,7 @@ class GameView(arcade.View):
         for coin in arcade.check_for_collision_with_list(self.player_sprite, self.coin_list):
             coin.remove_from_sprite_lists()
             self.score += 1
+            arcade.Sound(SFX_COIN).play()  # suona l'effetto di raccolta moneta
 
         # Uscita a sinistra: torna al livello precedente (o blocca al bordo)
         if self.player_sprite.left < 0:
@@ -218,10 +218,13 @@ class GameView(arcade.View):
                 self.player_sprite.center_y = 400
             else:
                 # Nei livelli normali la caduta resetta tutto dal livello 1
+                stoppa_musica(self.window)
+                arcade.Sound(SFX_LOSE).play()  # suona l'effetto di sconfitta
                 self.current_level = 1
                 self.score = 0
                 self.spawn_destra = True
                 self.carica_livello(self.current_level)
+                cambia_musica(self.window, MUSIC_PLATFORMER)  # riavvia la musica del platformer
 
         # Uscita a destra: passa al livello successivo
         if self.player_sprite.center_x > self.level_width - 50:
@@ -239,6 +242,8 @@ class GameView(arcade.View):
                 self.strega_sprite.center_y = 600
                 self.strega_list = arcade.SpriteList()
                 self.strega_list.append(self.strega_sprite)
+                stoppa_musica(self.window)  # stoppa la musica attuale
+                arcade.Sound(SFX_MAGIC).play()  # suona l'effetto magico all'apparizione della strega
 
 
         # Collisione con la strega: avvia il dialogo
@@ -267,6 +272,7 @@ class GameView(arcade.View):
             if self.physics_engine.can_jump():
                 jump_speed = PLAYER_JUMP_SPEED
                 self.player_sprite.change_y = jump_speed
+                arcade.Sound(SFX_JUMP).play()  # suona l'effetto di salto
 
         elif key in (arcade.key.LEFT, arcade.key.A):
             self.player_sprite.change_x = -PLAYER_MOVEMENT_SPEED
@@ -280,7 +286,7 @@ class GameView(arcade.View):
 
         # COMANDI AMMINISTRATORE 
         if key == arcade.key.Z:
-            self.score = 30                                    # imposta monete a 30
+            self.score = 30   # imposta monete a 30
         if key == arcade.key.X:
             self.player_sprite.center_x = self.level_width - 60  # teletrasporto alla fine
 
