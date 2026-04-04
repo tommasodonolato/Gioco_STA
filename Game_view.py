@@ -42,6 +42,7 @@ class GameView(arcade.View):
         self.fase_finale = 0           # 0=inizio, 1=dialogo, 2=strega scende, 3=vittoria
         self.sfx_magic_sound = None    # suono comparsa strega
         self.sfx_magic_player = None   # player del suono comparsa strega
+        self.sfx_magic_started = False # True dopo il primo frame che lo suona
 
 
     def setup(self):
@@ -247,15 +248,25 @@ class GameView(arcade.View):
                 stoppa_musica(self.window)  # stoppa la musica attuale
                 self.sfx_magic_sound = arcade.Sound(SFX_MAGIC)  # carica il suono di comparsa strega
                 self.sfx_magic_player = self.sfx_magic_sound.play(volume = 20)  # suona il suono di comparsa strega
-
+                self.sfx_magic_started = False
 
         # Collisione con la strega: avvia il dialogo
+        if self.strega_apparsa and self.strega_sprite:
+            if arcade.check_for_collision(self.player_sprite, self.strega_sprite):
+                if self.fase_finale == 0:
+                    self.fase_finale = 1
+                    self.window.show_view(DialogoView(self))
+
+
         # Quando l'effetto della strega è finito, riavvia la musica della luna
         if self.sfx_magic_player and self.sfx_magic_sound:
-            if not self.sfx_magic_sound.is_playing(self.sfx_magic_player):
+            if self.sfx_magic_sound.is_playing(self.sfx_magic_player):
+                self.sfx_magic_started = True  # confermato che sta suonando
+            elif self.sfx_magic_started:       # era partito ed ora è finito
                 cambia_musica(self.window, MUSIC_LUNA)
                 self.sfx_magic_player = None
                 self.sfx_magic_sound = None
+                self.sfx_magic_started = False
 
         # Fase finale 2: la strega scende fino a y=200, poi mostra la vittoria
         if self.fase_finale == 2 and self.strega_sprite:
@@ -301,4 +312,5 @@ class GameView(arcade.View):
             self.player_sprite.change_x = 0
 
         if key == arcade.key.P:
-            self.setup()  # reset rapido del gioco (tasto nascosto)
+            self.setup()  # reset rapido del gioco 
+            cambia_musica(self.window, MUSIC_PLATFORMER)

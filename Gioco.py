@@ -72,6 +72,7 @@ SFX_JUMP    = "./Sounds/Jump.wav"
 SFX_LOSE    = "./Sounds/Lose.wav"
 SFX_MAGIC   = "./Sounds/Magic_appear.wav"
 SFX_DIALOGO = "./Sounds/Next_dialogo.wav"
+SFX_VICTORY = "./Sounds/Victory.wav"
 
 
 def stoppa_musica(window):
@@ -392,6 +393,8 @@ class VittoriaView(arcade.View):
     def __init__(self):
         super().__init__()
         self.background = arcade.load_texture("./game_assets/Victory.png")
+        stoppa_musica(self.window)
+        arcade.Sound(SFX_VICTORY).play()
 
     def on_draw(self):
         self.clear()
@@ -602,7 +605,7 @@ class GameView(arcade.View):
                 self.strega_list.append(self.strega_sprite)
                 stoppa_musica(self.window)
                 self.sfx_magic_sound = arcade.Sound(SFX_MAGIC)
-                self.sfx_magic_player = self.sfx_magic_sound.play(volume=20)
+                self.sfx_magic_player = self.sfx_magic_sound.play(volume=40)
 
         if self.sfx_magic_player and self.sfx_magic_sound:
             if not self.sfx_magic_sound.is_playing(self.sfx_magic_player):
