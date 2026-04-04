@@ -4,7 +4,8 @@ import arcade
 from Costanti import *
 from Player import Player
 from Parallax import ParallaxLayer
-from Views import MenuView, PauseView, DialogoView, VittoriaView, GameOverView, cambia_musica, stoppa_musica
+from Views import MenuView, PauseView, DialogoView, VittoriaView, GameOverView
+from Musica import stoppa_musica, cambia_musica
 
 
 class GameView(arcade.View):
