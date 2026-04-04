@@ -33,7 +33,7 @@ class MenuView(arcade.View):
             self.window.show_view(LoreView())
 
 
-# ---------------------------------------------------------------
+
 
 class PauseView(arcade.View):
     # Schermata di pausa. Invio per riprendere.
@@ -55,7 +55,7 @@ class PauseView(arcade.View):
             self.window.show_view(self.game_view)  # riprende il gioco
 
 
-# ---------------------------------------------------------------
+
 
 class CommandsView(arcade.View):
     # Schermata con i comandi del gioco. Invio per iniziare a giocare.
@@ -81,7 +81,7 @@ class CommandsView(arcade.View):
             self.window.show_view(game)
 
 
-# ---------------------------------------------------------------
+
 
 class LoreView(arcade.View):
     # Schermata della storia iniziale. Premi N per andare avanti.
@@ -112,7 +112,7 @@ class LoreView(arcade.View):
                 self.window.show_view(CommandsView())  # finite le slide, mostra i comandi
 
 
-# ---------------------------------------------------------------
+
 
 class DialogoView(arcade.View):
     # Schermata di dialogo con la strega. Premi N per avanzare.
@@ -148,7 +148,6 @@ class DialogoView(arcade.View):
                 self.window.show_view(self.game_view)
 
 
-# ---------------------------------------------------------------
 
 class GameOverView(arcade.View):
     # Schermata di game over. Invio per tornare al menu.
@@ -171,7 +170,7 @@ class GameOverView(arcade.View):
             self.window.show_view(MenuView())  # torna al menu principale
 
 
-# ---------------------------------------------------------------
+
 
 class VittoriaView(arcade.View):
     # Schermata di vittoria. Invio per tornare al menu.

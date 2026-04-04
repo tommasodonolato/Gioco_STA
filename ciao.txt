@@ -1,0 +1,24 @@
+Buongiorno, prima di tutto non divulgate questo video, al massimo se volete dite in giro che è bellissimo
+
+il file gioco.py è tutto il codice insieme, quindi non ve lo faccio vedere, sono più o meno 700 righe. 
+non so se si sente l'audio ma ci sono anche gli effetti sonori
+
+NON ACCUSATEMI DI AI ABUSE, L'HO USATA SOLO PER CREARE LE MAPPE (NON SAPVEO USARE TILED) E PER I SUONI, per il reato solo w3 school
+
+
+se skippo i livelli è perchè ho i comandi da admin
+
+adesso vi faccio vedere il codice, poi il gameplay   LEGGETE BENE GRAZIE nel caso stoppate
+
+
+la prima è la vittoria seconda sconfitta, se volete leggere i dialoghi stoppate, io ormai li so a memoria.
+
+
+se volete fare anche voi i dialoghi cos' basta usare presentazioni e screen alla slide. il font si chiama press start 2p
+
+ho usato i comandi admin, non avwevp voglia di farlo tutto
+
+questo è tutto, BUONA PASQUA
+
+
+AURA GIALLO SANDER

@@ -28,7 +28,7 @@ class GameView(GameLogic):
 
         # COMANDI AMMINISTRATORE
         if key == arcade.key.Z:
-            self.score = 30                                       # imposta monete a 30
+            self.score = 30  # imposta monete a 30
         if key == arcade.key.X:
             self.player_sprite.center_x = self.level_width - 60  # teletrasporto alla fine
 

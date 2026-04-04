@@ -1,4 +1,4 @@
-# Costanti di gioco e percorsi dei file usati in tutto il progetto. .
+# Costanti di gioco e percorsi dei file usati in tutto il progetto
 
 # Dimensioni della finestra
 WINDOW_WIDTH = 1280
