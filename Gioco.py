@@ -25,7 +25,6 @@ Software - siti web utilizzati per la creazione del gioco:
 
 '''
 
-  
 import arcade
 
 WINDOW_WIDTH = 1280
@@ -47,15 +46,13 @@ LEVELS = {
     3: "./Tiled/mappa_3.tmx"
 }
 
-
 PLAYER_IDLE_SOURCE = "./sprite_animato/idle.png"
 PLAYER_WALK_SOURCE = "./sprite_animato/run.png"
 PLAYER_JUMP_SOURCE = "./sprite_animato/jump.png"
 
-
 PLAYER_FRAME_WIDTH  = 128
 PLAYER_FRAME_HEIGHT = 64
-PLAYER_NUM_FRAME    = 8   
+PLAYER_NUM_FRAME    = 8
 
 FINAL_BG_LAYERS = [
     ("./Sfondi_parallasse/moon/moon_sky.png",   0.05),
@@ -65,6 +62,30 @@ FINAL_BG_LAYERS = [
     ("./Sfondi_parallasse/moon/moon_front.png", 0.55),
     ("./Sfondi_parallasse/moon/moon_floor.png", 0.80),
 ]
+
+MUSIC_DIALOGO    = "./Sounds/Dialogo_music.wav"
+MUSIC_PLATFORMER = "./Sounds/Platformer_music.wav"
+MUSIC_LUNA       = "./Sounds/Luna_music.wav"
+
+SFX_COIN    = "./Sounds/Coin_collect.wav"
+SFX_JUMP    = "./Sounds/Jump.wav"
+SFX_LOSE    = "./Sounds/Lose.wav"
+SFX_MAGIC   = "./Sounds/Magic_appear.wav"
+SFX_DIALOGO = "./Sounds/Next_dialogo.wav"
+
+
+def stoppa_musica(window):
+    if window.music_player and window.music_sound:
+        window.music_sound.stop(window.music_player)
+    window.music_player = None
+    window.music_sound = None
+
+
+def cambia_musica(window, percorso: str, volume: float = 0.5):
+    if window.music_player and window.music_sound:
+        window.music_sound.stop(window.music_player)
+    window.music_sound = arcade.Sound(percorso)
+    window.music_player = window.music_sound.play(loop=True, volume=volume)
 
 
 class SpriteAnimato(arcade.Sprite):
@@ -136,7 +157,6 @@ class SpriteAnimato(arcade.Sprite):
         self.texture = anim["textures"][self.indice_frame]
 
 
-
 class Player(SpriteAnimato):
     def __init__(self):
         super().__init__(scala=2.0)
@@ -181,7 +201,6 @@ class Player(SpriteAnimato):
         self._guarda_destra = True
 
     def update_animation(self, delta_time: float = 1 / 60):
-    # Flip sinistra/destra
         if self.change_x > 0:
             self._guarda_destra = True
         elif self.change_x < 0:
@@ -190,7 +209,6 @@ class Player(SpriteAnimato):
         self.scale = (abs(self.scale[0]) if self._guarda_destra
                     else -abs(self.scale[0]), abs(self.scale[1]))
 
-    # Scelta animazione
         if abs(self.change_y) > 1.5:
             self._in_aria = True
             if self.animazione_corrente != "jump":
@@ -230,10 +248,12 @@ class ParallaxLayer:
             )
             x += draw_width
 
+
 class MenuView(arcade.View):
     def __init__(self):
         super().__init__()
         self.background = arcade.load_texture("./game_assets/sfondo_inizio.jpg")
+        cambia_musica(self.window, MUSIC_DIALOGO)
 
         arcade.load_texture(PLAYER_IDLE_SOURCE)
         arcade.load_texture(PLAYER_WALK_SOURCE)
@@ -247,15 +267,16 @@ class MenuView(arcade.View):
             self.background,
             arcade.XYWH(WINDOW_WIDTH/2, WINDOW_HEIGHT/2, WINDOW_WIDTH, WINDOW_HEIGHT)
         )
+
     def on_mouse_press(self, x, y, button, modifiers):
         if 440 < x < 840 and 100 < y < 200:
             self.window.show_view(LoreView())
-        
+
 
 class PauseView(arcade.View):
     def __init__(self, game_view):
         super().__init__()
-        self.game_view = game_view  
+        self.game_view = game_view
         self.background = arcade.load_texture("./game_assets/pausa.png")
 
     def on_draw(self):
@@ -268,7 +289,6 @@ class PauseView(arcade.View):
     def on_key_press(self, key, modifiers):
         if key == arcade.key.RETURN:
             self.window.show_view(self.game_view)
-
 
 
 class CommandsView(arcade.View):
@@ -285,16 +305,18 @@ class CommandsView(arcade.View):
 
     def on_key_press(self, key, modifiers):
         if key == arcade.key.RETURN:
+            cambia_musica(self.window, MUSIC_PLATFORMER)
             game = GameView()
             game.setup()
             self.window.show_view(game)
+
 
 class LoreView(arcade.View):
     def __init__(self):
         super().__init__()
         self.immagini = [
             arcade.load_texture("./Lore/Lore_1.png"),
-            arcade.load_texture("./Lore/Lore_2.png"), 
+            arcade.load_texture("./Lore/Lore_2.png"),
             arcade.load_texture("./Lore/Lore_3.png"),
             arcade.load_texture("./Lore/Lore_4.png"),
             arcade.load_texture("./Lore/Lore_5.png"),
@@ -310,11 +332,12 @@ class LoreView(arcade.View):
 
     def on_key_press(self, key, modifiers):
         if key == arcade.key.N:
+            arcade.Sound(SFX_DIALOGO).play()
             self.indice += 1
             if self.indice >= len(self.immagini):
-                self.window.show_view(CommandsView())  
+                self.window.show_view(CommandsView())
 
-    
+
 class DialogoView(arcade.View):
     def __init__(self, game_view):
         super().__init__()
@@ -335,8 +358,9 @@ class DialogoView(arcade.View):
 
     def on_key_press(self, key, modifiers):
         if key == arcade.key.N:
+            arcade.Sound(SFX_DIALOGO).play()
             self.indice += 1
-            if self.indice == 2: 
+            if self.indice == 2:
                 if self.game_view.score < 30:
                     self.window.show_view(GameOverView())
                     return
@@ -349,6 +373,8 @@ class GameOverView(arcade.View):
     def __init__(self):
         super().__init__()
         self.background = arcade.load_texture("./game_assets/Game_over.png")
+        stoppa_musica(self.window)
+        arcade.Sound(SFX_LOSE).play()
 
     def on_draw(self):
         self.clear()
@@ -358,11 +384,6 @@ class GameOverView(arcade.View):
         )
 
     def on_key_press(self, key, modifiers):
-        if key == arcade.key.RETURN:
-            game = GameView()
-            game.setup()
-            self.window.show_view(game)
-
         if key == arcade.key.RETURN:
             self.window.show_view(MenuView())
 
@@ -381,11 +402,12 @@ class VittoriaView(arcade.View):
 
     def on_key_press(self, key, modifiers):
         if key == arcade.key.RETURN:
+            stoppa_musica(self.window)
             self.window.show_view(MenuView())
 
 
 class GameView(arcade.View):
-    
+
     def __init__(self):
         super().__init__()
 
@@ -407,19 +429,16 @@ class GameView(arcade.View):
         self.strega_sprite = None
         self.fase_finale = 0
         self.strega_list = arcade.SpriteList()
-
-
-
+        self.sfx_magic_sound = None
+        self.sfx_magic_player = None
 
     def setup(self):
         self.score = 0
-        
         self.current_level = 1
-
         self.is_final_level = False
+        self.spawn_destra = True
 
         self.player_list = arcade.SpriteList()
-
         self.camera = arcade.Camera2D()
         self.ui_camera = arcade.Camera2D()
 
@@ -436,19 +455,12 @@ class GameView(arcade.View):
 
         self.carica_livello(self.current_level)
 
-  
-    
     def carica_livello(self, numero: int):
-
         tile_map = arcade.load_tilemap(LEVELS[numero], scaling=TILE_SCALING)
-        
-
         self.wall_list = tile_map.sprite_lists["Livello tile 1"]
-
         self.coin_list = tile_map.sprite_lists.get("Monete", arcade.SpriteList())
-
         self.level_width = tile_map.width * tile_map.tile_width * TILE_SCALING
-  
+
         if self.spawn_destra:
             self.player_sprite.center_x = 100
             self.player_sprite.center_y = 400
@@ -461,11 +473,7 @@ class GameView(arcade.View):
             platforms=self.wall_list,
             gravity_constant=GRAVITY
         )
-        target_x = max(self.player_sprite.center_x, 0)
-        target_x = min(target_x, self.level_width - WINDOW_WIDTH / 2)
         self.camera.position = (WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2)
-
-
 
     def livello_successivo(self):
         if self.current_level < len(LEVELS):
@@ -474,18 +482,17 @@ class GameView(arcade.View):
         else:
             self.carica_livello_finale()
 
-
-
     def carica_livello_finale(self):
         self.is_final_level = True
+        cambia_musica(self.window, MUSIC_LUNA)
+
         self.parallax_layers = [
-            ParallaxLayer(path, speed) 
-            for path, speed in FINAL_BG_LAYERS    
+            ParallaxLayer(path, speed)
+            for path, speed in FINAL_BG_LAYERS
         ]
 
         self.wall_list = arcade.SpriteList()
         self.coin_list = arcade.SpriteList()
-
         self.level_width = 99999
 
         self.player_sprite.center_x = 100
@@ -496,20 +503,17 @@ class GameView(arcade.View):
         self.strega_sprite = None
         self.fase_finale = 0
 
-        floor = arcade.SpriteSolidColor(99999, 64, color = (0, 0, 0, 0))
+        floor = arcade.SpriteSolidColor(99999, 64, color=(0, 0, 0, 0))
         floor.center_x = self.level_width / 2
         floor.center_y = 32
         self.wall_list.append(floor)
 
         self.physics_engine = arcade.PhysicsEnginePlatformer(
             self.player_sprite,
-            platforms = self.wall_list, 
-            gravity_constant = 0.2
+            platforms=self.wall_list,
+            gravity_constant=0.2
         )
-  
 
-
-        
     def on_draw(self):
         self.clear()
 
@@ -530,10 +534,8 @@ class GameView(arcade.View):
         arcade.draw_text(
             f"MONETE: {self.score}",
             20, WINDOW_HEIGHT - 40,
-            arcade.color.GOLD, 20, font_name = "Courier New", bold = True
+            arcade.color.GOLD, 20, font_name="Courier New", bold=True
         )
-
-
 
     def pan_camera_to_player(self):
         if self.is_final_level:
@@ -552,17 +554,14 @@ class GameView(arcade.View):
                 CAMERA_SPEED
             )
 
-
     def on_update(self, delta_time):
         self.physics_engine.update()
         self.player_sprite.update_animation(delta_time)
 
-        coin_hit_list = arcade.check_for_collision_with_list(
-            self.player_sprite, self.coin_list
-        )
-        for coin in coin_hit_list:
+        for coin in arcade.check_for_collision_with_list(self.player_sprite, self.coin_list):
             coin.remove_from_sprite_lists()
             self.score += 1
+            arcade.Sound(SFX_COIN).play()
 
         if self.player_sprite.left < 0:
             if self.is_final_level:
@@ -577,12 +576,15 @@ class GameView(arcade.View):
         if self.player_sprite.center_y < -100:
             if self.is_final_level:
                 self.player_sprite.center_x = 100
-                self.player_sprite.center_y = 400  
+                self.player_sprite.center_y = 400
             else:
+                stoppa_musica(self.window)
+                arcade.Sound(SFX_LOSE).play()
                 self.current_level = 1
                 self.score = 0
                 self.spawn_destra = True
                 self.carica_livello(self.current_level)
+                cambia_musica(self.window, MUSIC_PLATFORMER)
 
         if self.player_sprite.center_x > self.level_width - 50:
             if not self.is_final_level:
@@ -593,12 +595,21 @@ class GameView(arcade.View):
             self.timer_strega += delta_time
             if self.timer_strega > 5 and not self.strega_apparsa:
                 self.strega_apparsa = True
-                self.strega_sprite = arcade.Sprite("./game_assets/strega.png", scale = 2)
+                self.strega_sprite = arcade.Sprite("./game_assets/strega.png", scale=2)
                 self.strega_sprite.center_x = self.player_sprite.center_x + 1000
                 self.strega_sprite.center_y = 600
                 self.strega_list = arcade.SpriteList()
                 self.strega_list.append(self.strega_sprite)
-        
+                stoppa_musica(self.window)
+                self.sfx_magic_sound = arcade.Sound(SFX_MAGIC)
+                self.sfx_magic_player = self.sfx_magic_sound.play(volume=20)
+
+        if self.sfx_magic_player and self.sfx_magic_sound:
+            if not self.sfx_magic_sound.is_playing(self.sfx_magic_player):
+                cambia_musica(self.window, MUSIC_LUNA)
+                self.sfx_magic_player = None
+                self.sfx_magic_sound = None
+
         if self.strega_apparsa and self.strega_sprite:
             if arcade.check_for_collision(self.player_sprite, self.strega_sprite):
                 if self.fase_finale == 0:
@@ -614,15 +625,11 @@ class GameView(arcade.View):
 
         self.pan_camera_to_player()
 
-
-
     def on_key_press(self, key, modifiers):
         if key in (arcade.key.UP, arcade.key.SPACE, arcade.key.W):
-
             if self.physics_engine.can_jump():
-
-                jump_speed = PLAYER_JUMP_SPEED
-                self.player_sprite.change_y = jump_speed
+                self.player_sprite.change_y = PLAYER_JUMP_SPEED
+                arcade.Sound(SFX_JUMP).play(volume=25)
 
         elif key in (arcade.key.LEFT, arcade.key.A):
             self.player_sprite.change_x = -PLAYER_MOVEMENT_SPEED
@@ -630,19 +637,16 @@ class GameView(arcade.View):
         elif key in (arcade.key.RIGHT, arcade.key.D):
             self.player_sprite.change_x = PLAYER_MOVEMENT_SPEED
 
-        if key == arcade.key.X:
-            self.player_sprite.center_x = self.level_width - 60
-
         if key == arcade.key.ESCAPE:
             self.window.show_view(PauseView(self))
 
         if key == arcade.key.Z:
             self.score = 30
 
-
+        if key == arcade.key.X:
+            self.player_sprite.center_x = self.level_width - 60
 
     def on_key_release(self, key, modifiers):
-
         if key in (arcade.key.LEFT, arcade.key.A, arcade.key.RIGHT, arcade.key.D):
             self.player_sprite.change_x = 0
 
@@ -650,9 +654,10 @@ class GameView(arcade.View):
             self.setup()
 
 
-
 def main():
     window = arcade.Window(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE)
+    window.music_player = None
+    window.music_sound = None
     window.show_view(MenuView())
     arcade.run()
 

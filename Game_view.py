@@ -40,6 +40,8 @@ class GameView(arcade.View):
         self.timer_strega = 0          # secondi trascorsi dall'inizio della fase finale
         self.strega_apparsa = False
         self.fase_finale = 0           # 0=inizio, 1=dialogo, 2=strega scende, 3=vittoria
+        self.sfx_magic_sound = None    # suono comparsa strega
+        self.sfx_magic_player = None   # player del suono comparsa strega
 
 
     def setup(self):
@@ -243,15 +245,17 @@ class GameView(arcade.View):
                 self.strega_list = arcade.SpriteList()
                 self.strega_list.append(self.strega_sprite)
                 stoppa_musica(self.window)  # stoppa la musica attuale
-                arcade.Sound(SFX_MAGIC).play()  # suona l'effetto magico all'apparizione della strega
+                self.sfx_magic_sound = arcade.Sound(SFX_MAGIC)  # carica il suono di comparsa strega
+                self.sfx_magic_player = self.sfx_magic_sound.play(volume = 20)  # suona il suono di comparsa strega
 
 
         # Collisione con la strega: avvia il dialogo
-        if self.strega_apparsa and self.strega_sprite:
-            if arcade.check_for_collision(self.player_sprite, self.strega_sprite):
-                if self.fase_finale == 0:
-                    self.fase_finale = 1
-                    self.window.show_view(DialogoView(self))
+        # Quando l'effetto della strega è finito, riavvia la musica della luna
+        if self.sfx_magic_player and self.sfx_magic_sound:
+            if not self.sfx_magic_sound.is_playing(self.sfx_magic_player):
+                cambia_musica(self.window, MUSIC_LUNA)
+                self.sfx_magic_player = None
+                self.sfx_magic_sound = None
 
         # Fase finale 2: la strega scende fino a y=200, poi mostra la vittoria
         if self.fase_finale == 2 and self.strega_sprite:
@@ -272,7 +276,7 @@ class GameView(arcade.View):
             if self.physics_engine.can_jump():
                 jump_speed = PLAYER_JUMP_SPEED
                 self.player_sprite.change_y = jump_speed
-                arcade.Sound(SFX_JUMP).play()  # suona l'effetto di salto
+                arcade.Sound(SFX_JUMP).play(volume = 25)  # suona l'effetto di salto
 
         elif key in (arcade.key.LEFT, arcade.key.A):
             self.player_sprite.change_x = -PLAYER_MOVEMENT_SPEED
