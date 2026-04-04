@@ -44,7 +44,14 @@ FINAL_BG_LAYERS = [
     ("./Sfondi_parallasse/moon/moon_floor.png", 0.80),
 ]
 
-# Percorsi file audio
+# Percorsi file audio in loop
 MUSIC_DIALOGO = "./Sounds/Dialogo_music.wav"
 MUSIC_PLATFORMER = "./Sounds/Platformer_music.wav"
 MUSIC_LUNA = "./Sounds/Luna_music.wav"
+
+# Percorsi file audio singoli
+SFX_COIN    = "./Sounds/Coin_collect.wav"
+SFX_JUMP    = "./Sounds/Jump.wav"
+SFX_LOSE    = "./Sounds/Lose.wav"
+SFX_MAGIC   = "./Sounds/Magic_appear.wav"
+SFX_DIALOGO = "./Sounds/Next_dialogo.wav"
