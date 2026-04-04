@@ -1,7 +1,7 @@
 # Player 
 
 from Costanti import *
-from sprite_animato import SpriteAnimato
+from Sprite_animato import SpriteAnimato
 
 
 class Player(SpriteAnimato):
