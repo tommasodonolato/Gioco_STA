@@ -179,7 +179,7 @@ class VittoriaView(arcade.View):
         super().__init__()
         self.background = arcade.load_texture("./game_assets/Victory.png")
         stoppa_musica(self.window)
-        arcade.Sound(SFX_VICTORY).play(volume=30)  # suona l'effetto di vittoria
+        arcade.Sound(SFX_VICTORY).play(volume = 30)  # suona l'effetto di vittoria
 
     def on_draw(self):
         self.clear()
